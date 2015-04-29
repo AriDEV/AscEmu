@@ -209,6 +209,7 @@ class SERVER_DECL MapMgr : public CellHandler <MapCell>, public EventableObject,
 
 		/// Mark object as updated
 		void ObjectUpdated(Object* obj);
+        MapCell* LoadOrCreateCell(uint32 x, uint32 y);
 		void UpdateCellActivity(uint32 x, uint32 y, uint32 radius);
 
 		// Terrain Functions

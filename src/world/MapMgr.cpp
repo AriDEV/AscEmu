@@ -783,8 +783,11 @@ void MapMgr::UpdateInRangeSet(Object* obj, Player* plObj, MapCell* cell, ByteBuf
         //If the object we're checking for possible removal is a transport or other special object, and we are players on the same map, don't remove it, and add it whenever possible...
         else if (plObj && curObj->IsGameObject() && (TO< GameObject* >(curObj)->GetOverrides() & GAMEOBJECT_INFVIS) && obj->GetMapId() == curObj->GetMapId())
             fRange = 0.0f;
-        else if(plObj != NULL && plObj->camControle)
-			fRange = 0.0f;
+        else if (plObj != NULL && plObj->camControle)
+            fRange = 0.0f;
+        // unlimited range in instances
+        else if (this->GetMapInfo()->type)
+            fRange = 0.0f;
         else
             fRange = m_UpdateDistance;                  // normal distance
 
@@ -1009,6 +1012,25 @@ void MapMgr::LoadAllCells()
             }
         }
     }
+}
+
+MapCell* MapMgr::LoadOrCreateCell(uint32 x, uint32 y)
+{
+    auto cell = GetCell(x, y);
+    if (cell)
+        return cell;
+    
+    cell = Create(x, y);
+    cell->Init(x, y, this);
+    cell->SetActivity(true);
+    _map->CellGoneActive(x, y);
+    _terrain->LoadTile((int32)x / 8, (int32)y / 8);
+
+    auto spawns = _map->GetSpawnsList(x, y);
+    if (spawns)
+        cell->LoadObjects(spawns);
+
+    return cell;
 }
 
 void MapMgr::UpdateCellActivity(uint32 x, uint32 y, uint32 radius)
