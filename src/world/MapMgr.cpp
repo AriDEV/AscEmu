@@ -272,10 +272,10 @@ void MapMgr::PushObject(Object* obj)
     }
     ARCEMU_ASSERT(objCell != NULL);
 
-    uint32 endX = (x <= _sizeX) ? x + 1 : (_sizeX - 1);
-    uint32 endY = (y <= _sizeY) ? y + 1 : (_sizeY - 1);
-    uint32 startX = x > 0 ? x - 1 : 0;
-    uint32 startY = y > 0 ? y - 1 : 0;
+    uint32 endX = (x <= _sizeX) ? x + 2 : (_sizeX - 2);
+    uint32 endY = (y <= _sizeY) ? y + 2 : (_sizeY - 2);
+    uint32 startX = x > 0 ? x - 2 : 0;
+    uint32 startY = y > 0 ? y - 2 : 0;
     uint32 posX, posY;
     MapCell* cell;
     //MapCell::ObjectSet::iterator iter;
@@ -318,7 +318,7 @@ void MapMgr::PushObject(Object* obj)
     if (plObj != NULL)
     {
         m_PlayerStorage[plObj->GetLowGUID()] = plObj;
-        UpdateCellActivity(x, y, 2);
+        UpdateCellActivity(x, y, 4);
     }
     else
     {
@@ -537,7 +537,7 @@ void MapMgr::RemoveObject(Object* obj, bool free_guid)
         {
             uint32 x = GetPosX(obj->GetPositionX());
             uint32 y = GetPosY(obj->GetPositionY());
-            UpdateCellActivity(x, y, 2);
+            UpdateCellActivity(x, y, 4);
         }
         m_PlayerStorage.erase(TO< Player* >(obj)->GetLowGUID());
     }
@@ -706,14 +706,14 @@ void MapMgr::ChangeObjectLocation(Object* obj)
         if (obj->IsPlayer())
         {
             // have to unlock/lock here to avoid a deadlock situation.
-            UpdateCellActivity(cellX, cellY, 2);
+            UpdateCellActivity(cellX, cellY, 4);
             if (pOldCell != NULL)
             {
                 // only do the second check if there's -/+ 2 difference
-                if (abs((int)cellX - (int)pOldCell->_x) > 2 ||
-                    abs((int)cellY - (int)pOldCell->_y) > 2)
+                if (abs((int)cellX - (int)pOldCell->_x) > 4 ||
+                    abs((int)cellY - (int)pOldCell->_y) > 4)
                 {
-                    UpdateCellActivity(pOldCell->_x, pOldCell->_y, 2);
+                    UpdateCellActivity(pOldCell->_x, pOldCell->_y, 4);
                 }
             }
         }
@@ -1106,8 +1106,8 @@ void MapMgr::UpdateCellActivity(uint32 x, uint32 y, uint32 radius)
 
 bool MapMgr::_CellActive(uint32 x, uint32 y)
 {
-    uint32 endX = ((x + 1) <= _sizeX) ? x + 1 : (_sizeX - 1);
-    uint32 endY = ((y + 1) <= _sizeY) ? y + 1 : (_sizeY - 1);
+    uint32 endX = ((x + 2) <= _sizeX) ? x + 2 : (_sizeX - 2);
+    uint32 endY = ((y + 2) <= _sizeY) ? y + 2 : (_sizeY - 2);
     uint32 startX = x > 0 ? x - 1 : 0;
     uint32 startY = y > 0 ? y - 1 : 0;
     uint32 posX, posY;
@@ -1836,13 +1836,13 @@ DynamicObject* MapMgr::CreateDynamicObject()
 void MapMgr::AddForcedCell(MapCell* c)
 {
     m_forcedcells.insert(c);
-    UpdateCellActivity(c->GetPositionX(), c->GetPositionY(), 1);
+    UpdateCellActivity(c->GetPositionX(), c->GetPositionY(), 4);
 }
 
 void MapMgr::RemoveForcedCell(MapCell* c)
 {
     m_forcedcells.erase(c);
-    UpdateCellActivity(c->GetPositionX(), c->GetPositionY(), 1);
+    UpdateCellActivity(c->GetPositionX(), c->GetPositionY(), 4);
 }
 
 float MapMgr::GetFirstZWithCPZ(float x, float y, float z)
