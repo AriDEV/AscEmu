@@ -181,7 +181,7 @@ public:
     }
 };
 
-#define SINCLARI_SAY_1 "Prison guards, we are oleaving! These adventurers are taking over! Go go go!"
+#define SINCLARI_SAY_1 "Prison guards, we are leaving! These adventurers are taking over! Go go go!"
 #define SINCLARY_SAY_2 "I'm locking the door. Good luck, and thank you for doing this."
 
 #define GO_TVH_PRISON_SEAL 191723
@@ -207,21 +207,24 @@ public:
             {
                 _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARI_SAY_1);
                 _unit->GetAIInterface()->setMoveType(MOVEMENTTYPE_FORWARDTHENSTOP);
+                break;
             }
-            break;
 
             case 4:
             {
                 _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARY_SAY_2);
                 _unit->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                break;
+            }
+            case 5:
+            {
                 TheVioletHoldScript* pInstance = (TheVioletHoldScript*)_unit->GetMapMgr()->GetScript();
                 pInstance->SetInstanceData(Data_EncounterState, MAP_VIOLET_HOLD, State_InProgress);
-
                 GameObject* pVioletHoldDoor = pInstance->FindClosestGameObjectOnMap(GO_TVH_PRISON_SEAL, 1822.59f, 803.93f, 44.36f);
                 if (pVioletHoldDoor != NULL)
                     pVioletHoldDoor->SetState(GAMEOBJECT_STATE_CLOSED);
+                break;
             }
-            break;
         }
     }
 };
