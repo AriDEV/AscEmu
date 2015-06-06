@@ -125,11 +125,25 @@ public:
         ++m_ticker;
         switch (mInstance->GetWorldStatesHandler().GetWorldStateForZone(0, AREA_VIOLET_HOLD, WORLDSTATE_VH))
         {
-        case State_NotStarted: break;
-        case State_InProgress: break;
-        case State_Finished: break;
-        case State_Performed: break;
-        case State_PreProgress: break;
+        case State_NotStarted: 
+            S0_ReviveGuards();
+            break;
+        case State_InProgress:  printf("State: %s\n", "State_InProgress"); break;
+        case State_Finished:    printf("State: %s\n", "State_Finished"); break;
+        case State_Performed:   printf("State: %s\n", "State_Performed"); break;
+        case State_PreProgress: printf("State: %s\n", "State_PreProgress"); break;
+        }
+    }
+
+    void S0_ReviveGuards()
+    {
+        auto guards = this->FindCreaturesOnMap(CN_VIOLET_HOLD_GUARD);
+        for (auto guard : guards)
+        {
+            if (guard == nullptr || guard->isAlive())
+                continue;
+
+            guard->Despawn(1500, 500);
         }
     }
 
