@@ -125,7 +125,7 @@ public:
         ++m_ticker;
         switch (mInstance->GetWorldStatesHandler().GetWorldStateForZone(0, AREA_VIOLET_HOLD, WORLDSTATE_VH))
         {
-        case State_NotStarted: 
+        case State_NotStarted:
             S0_ReviveGuards();
             break;
         case State_InProgress:  printf("State: %s\n", "State_InProgress"); break;
@@ -237,27 +237,21 @@ public:
         switch (iWaypointId)
         {
         case 2:
-        {
-                  _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARI_SAY_1);
-                  _unit->GetAIInterface()->setMoveType(MOVEMENTTYPE_FORWARDTHENSTOP);
-                  break;
-        }
+            _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARI_SAY_1);
+            _unit->GetAIInterface()->setMoveType(MOVEMENTTYPE_FORWARDTHENSTOP);
+            break;
 
         case 4:
-        {
-                  _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARY_SAY_2);
-                  _unit->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                  break;
-        }
+            _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARY_SAY_2);
+            _unit->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            break;
         case 5:
-        {
-                  TheVioletHoldScript* pInstance = (TheVioletHoldScript*)_unit->GetMapMgr()->GetScript();
-                  pInstance->SetInstanceData(Data_EncounterState, MAP_VIOLET_HOLD, State_InProgress);
-                  GameObject* pVioletHoldDoor = pInstance->FindClosestGameObjectOnMap(GO_TVH_PRISON_SEAL, 1822.59f, 803.93f, 44.36f);
-                  if (pVioletHoldDoor != NULL)
-                      pVioletHoldDoor->SetState(GAMEOBJECT_STATE_CLOSED);
-                  break;
-        }
+            TheVioletHoldScript* pInstance = (TheVioletHoldScript*)_unit->GetMapMgr()->GetScript();
+            pInstance->SetInstanceData(Data_EncounterState, MAP_VIOLET_HOLD, State_InProgress);
+            GameObject* pVioletHoldDoor = pInstance->FindClosestGameObjectOnMap(GO_TVH_PRISON_SEAL, 1822.59f, 803.93f, 44.36f);
+            if (pVioletHoldDoor != NULL)
+                pVioletHoldDoor->SetState(GAMEOBJECT_STATE_CLOSED);
+            break;
         }
     }
 };
