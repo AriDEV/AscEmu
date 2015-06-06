@@ -7103,6 +7103,11 @@ void Player::RemovePlayerPet(uint32 pet_number)
 
 void Player::_Relocate(uint32 mapid, const LocationVector & v, bool sendpending, bool force_new_world, uint32 instance_id)
 {
+	// Clear target on map change
+	{
+		this->SetSelection(0);
+	}
+
     //this func must only be called when switching between maps!
     WorldPacket data(41);
     if (sendpending && mapid != m_mapId && force_new_world)
