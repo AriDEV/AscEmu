@@ -103,6 +103,7 @@ class TheVioletHoldScript : public MoonInstanceScript
 private:
     int32 m_numBarrel;
     uint32 m_phaseData[TVH_END];
+    int32 m_ticker;
 
 public:
     MOONSCRIPT_INSTANCE_FACTORY_FUNCTION(TheVioletHoldScript, MoonInstanceScript);
@@ -112,7 +113,25 @@ public:
 
         for (int i = 0; i < TVH_END; ++i)
             m_phaseData[i] = State_NotStarted;
+
+        // Update every 250ms
+        m_ticker = 0;
+        this->SetUpdateEventFreq(250);
+        this->RegisterScriptUpdateEvent();
     };
+
+    void UpdateEvent()
+    {
+        ++m_ticker;
+        switch (mInstance->GetWorldStatesHandler().GetWorldStateForZone(0, AREA_VIOLET_HOLD, WORLDSTATE_VH))
+        {
+        case State_NotStarted: break;
+        case State_InProgress: break;
+        case State_Finished: break;
+        case State_Performed: break;
+        case State_PreProgress: break;
+        }
+    }
 
     void SetData(uint32 pIndex, uint32 pData)
     {
@@ -203,28 +222,28 @@ public:
     {
         switch (iWaypointId)
         {
-            case 2:
-            {
-                _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARI_SAY_1);
-                _unit->GetAIInterface()->setMoveType(MOVEMENTTYPE_FORWARDTHENSTOP);
-                break;
-            }
+        case 2:
+        {
+                  _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARI_SAY_1);
+                  _unit->GetAIInterface()->setMoveType(MOVEMENTTYPE_FORWARDTHENSTOP);
+                  break;
+        }
 
-            case 4:
-            {
-                _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARY_SAY_2);
-                _unit->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                break;
-            }
-            case 5:
-            {
-                TheVioletHoldScript* pInstance = (TheVioletHoldScript*)_unit->GetMapMgr()->GetScript();
-                pInstance->SetInstanceData(Data_EncounterState, MAP_VIOLET_HOLD, State_InProgress);
-                GameObject* pVioletHoldDoor = pInstance->FindClosestGameObjectOnMap(GO_TVH_PRISON_SEAL, 1822.59f, 803.93f, 44.36f);
-                if (pVioletHoldDoor != NULL)
-                    pVioletHoldDoor->SetState(GAMEOBJECT_STATE_CLOSED);
-                break;
-            }
+        case 4:
+        {
+                  _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARY_SAY_2);
+                  _unit->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                  break;
+        }
+        case 5:
+        {
+                  TheVioletHoldScript* pInstance = (TheVioletHoldScript*)_unit->GetMapMgr()->GetScript();
+                  pInstance->SetInstanceData(Data_EncounterState, MAP_VIOLET_HOLD, State_InProgress);
+                  GameObject* pVioletHoldDoor = pInstance->FindClosestGameObjectOnMap(GO_TVH_PRISON_SEAL, 1822.59f, 803.93f, 44.36f);
+                  if (pVioletHoldDoor != NULL)
+                      pVioletHoldDoor->SetState(GAMEOBJECT_STATE_CLOSED);
+                  break;
+        }
         }
     }
 };
@@ -284,19 +303,19 @@ public:
         if (!pInstance)
             return;
 
-        if(!pObject->IsCreature())
+        if (!pObject->IsCreature())
             return;
 
         Creature* pCreature = TO_CREATURE(pObject);
 
         switch (IntId)
         {
-            case 0:
-                GossipHello(pObject, pPlayer);
-                break;
+        case 0:
+            GossipHello(pObject, pPlayer);
+            break;
 
-            case 1:
-            {
+        case 1:
+        {
                   GossipMenu* menu;
                   objmgr.CreateGossipMenuForPlayer(&menu, pObject->GetGUID(), SINCLARI_ON_FINISH, pPlayer);
                   menu->AddItem(ICON_CHAT, pPlayer->GetSession()->LocalizedGossipOption(SINCLARI_GET_SAFETY), 2);
@@ -304,22 +323,22 @@ public:
 
                   // New Encounter State included
                   pInstance->SetInstanceData(Data_EncounterState, MAP_VIOLET_HOLD, State_PreProgress);
-            }break;
+        }break;
 
-            case 2:
-            {
-                      TO_CREATURE(pObject)->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
-                      pCreature->GetAIInterface()->setMoveType(MOVEMENTTYPE_NONE);
-                      //pCreature->MoveToWaypoint(1);
-                      pCreature->GetAIInterface()->StopMovement(10);
+        case 2:
+        {
+                  TO_CREATURE(pObject)->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
+                  pCreature->GetAIInterface()->setMoveType(MOVEMENTTYPE_NONE);
+                  //pCreature->MoveToWaypoint(1);
+                  pCreature->GetAIInterface()->StopMovement(10);
 
-            }break;
+        }break;
 
-            case 3:
-            {
+        case 3:
+        {
                   Arcemu::Gossip::Menu::Complete(pPlayer);
                   pPlayer->SafeTeleport(pPlayer->GetInstanceID(), MAP_VIOLET_HOLD, 1830.531006f, 803.939758f, 44.340508f, 6.281611f);
-            }break;
+        }break;
         }
     }
 };
