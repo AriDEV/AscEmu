@@ -108,17 +108,6 @@ public:
     MOONSCRIPT_INSTANCE_FACTORY_FUNCTION(TheVioletHoldScript, MoonInstanceScript);
     TheVioletHoldScript(MapMgr* pMapMgr) : MoonInstanceScript(pMapMgr)
     {
-        // Horrible, awful hack to load all map cells
-        for (auto x = 226; x <= 229; ++x)
-        {
-            for (auto y = 242; y <= 244; ++y)
-            {
-                auto cell = pMapMgr->LoadOrCreateCell(x, y);
-                cell->SetActivity(true);
-                pMapMgr->AddForcedCell(cell);
-                pMapMgr->UpdateCellActivity(x, y, 256);
-            }
-        }
         m_numBarrel = 0;
 
         for (int i = 0; i < TVH_END; ++i)

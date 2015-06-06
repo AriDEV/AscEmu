@@ -72,7 +72,6 @@ const char* GetMapTypeString(uint8 type)
 
 bool ChatHandler::HandleResetAllInstancesCommand(const char* args, WorldSession* m_session)
 {
-
     Player* plr;
     if (strlen(args) == 0)
         plr = getSelectedChar(m_session, true);
