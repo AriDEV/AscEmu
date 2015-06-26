@@ -237,8 +237,7 @@ public:
         switch (iWaypointId)
         {
         case 2:
-            _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARI_SAY_1);
-            _unit->GetAIInterface()->setMoveType(MOVEMENTTYPE_FORWARDTHENSTOP);
+            this->OnReachCrystal();
             break;
 
         case 4:
@@ -253,6 +252,12 @@ public:
                 pVioletHoldDoor->SetState(GAMEOBJECT_STATE_CLOSED);
             break;
         }
+    }
+
+    void OnReachCrystal()
+    {
+        _unit->SendChatMessage(CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, SINCLARI_SAY_1);
+        _unit->GetAIInterface()->setMoveType(MOVEMENTTYPE_FORWARDTHENSTOP);
     }
 };
 
