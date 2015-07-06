@@ -106,7 +106,6 @@ public:
         for (int i = 0; i < TVH_END; ++i)
             m_phaseData[i] = State_NotStarted;
 
-        this->SetUpdateEventFreq(VH_TIMER_UPDATE);
         this->RegisterScriptUpdateEvent();
     };
 
@@ -128,6 +127,7 @@ public:
         case State_NotStarted:
             S0_ReviveGuards();
             S0_SpawnIntroMobs();
+            S0_RemoveDeadIntroMobs();
             break;
         case State_InProgress:
             S2_SpawnPortals();
@@ -152,14 +152,34 @@ public:
         }
     }
 
+    void S0_RemoveDeadIntroMobs()
+    {
+        auto introMobs = this->FindCreaturesOnMap(std::vector<uint32> { CN_INTRO_AZURE_BINDER_ARCANE, CN_INTRO_AZURE_INVADER_ARMS, CN_INTRO_AZURE_MAGE_SLAYER_MELEE, CN_INTRO_AZURE_SPELLBREAKER_ARCANE });
+        for (auto mob : introMobs)
+        {
+            if (mob == nullptr || mob->isAlive())
+                continue;
+
+            mob->Despawn(1500, 0);
+        }
+    }
+
     void S0_SpawnIntroMobs()
     {
-        if (S0_SpawnIntroMobsTimer > 0) return;
+        if (IsTimerFinished(S0_SpawnIntroMobsTimer))
+        {
+            S0_SpawnIntroMobsTimer = 0; // This forces a new timer to be started below
+            
+            SpawnCreature(GetRandomIntroMob(), IntroPortals[0]);
+            SpawnCreature(GetRandomIntroMob(), IntroPortals[1]);
+            SpawnCreature(GetRandomIntroMob(), IntroPortals[2]);
+        }
 
         // Start another 15s timer
-        S0_SpawnIntroMobsTimer = AddTimer(VH_TIMER_SPAWN_INTRO_MOB);
-        
-        // TODO: Spawn mobs
+        if (GetTimer(S0_SpawnIntroMobsTimer) == 0)
+        {
+            S0_SpawnIntroMobsTimer = AddTimer(VH_TIMER_SPAWN_INTRO_MOB);
+        }
     }
 
     void S1_ActivateCrystalFleeRoom()
@@ -230,6 +250,19 @@ public:
         {
             portal->Despawn(VH_TIMER_INTRO_PORTAL_DESPAWN_TIME, 0);
         }
+    }
+
+    int GetRandomIntroMob()
+    {
+        auto rnd = RandomFloat(100.0f);
+        if (rnd < 25.0f)
+            return CN_INTRO_AZURE_BINDER_ARCANE;
+        if (rnd < 50.f)
+            return CN_INTRO_AZURE_INVADER_ARMS;
+        if (rnd < 75.0f)
+            return CN_INTRO_AZURE_MAGE_SLAYER_MELEE;
+
+        return CN_INTRO_AZURE_SPELLBREAKER_ARCANE;
     }
 
     void OnStateChange(uint32 pLastState, uint32 pNewState)
@@ -476,6 +509,7 @@ public:
     }
 };
 
+/* TODO: Replace spell casting logic for all instances, this is temp */
 class VHCreatureAI : public MoonScriptCreatureAI
 {
 protected:

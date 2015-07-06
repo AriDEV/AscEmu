@@ -21,6 +21,11 @@
 
 const Location VH_ENTRANCE = { 1806.955566f, 803.851807f, 44.363323f, 0.0f };
 const Location VH_PLAYER_TELEPORT = { 1830.531006f, 803.939758f, 44.340508f, 6.281611f };
+const Location IntroPortals[] = {
+    { 1878.363770f, 845.572144f, 43.333664f, 4.825092f }, // Left portal
+    { 1890.527832f, 758.085510f, 47.666927f, 1.714914f }, // Right portal
+    { 1931.233154f, 802.679871f, 52.410446f, 3.112921f }, // Up portal
+};
 
 enum VHEntries : uint32
 {
@@ -92,7 +97,7 @@ const Location VHPortalLocations[] =
     { 1908.31f, 809.657f, 38.7037f, 3.08701f },
 };
 
-enum VHTimers : uint32
+enum VHTimers : int32
 {
     VH_TIMER_UPDATE = 100,
 
