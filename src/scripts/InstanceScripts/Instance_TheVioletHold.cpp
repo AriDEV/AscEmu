@@ -529,7 +529,25 @@ public:
     MOONSCRIPT_FACTORY_FUNCTION(VHCreatureAI, MoonScriptCreatureAI);
     VHCreatureAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
     {
-        
+        this->CreateWaypoint(1, 0, 0, VH_DOOR_ATTACK_POSITION);
+        _unit->GetAIInterface()->setMoveType(MOVEMENTTYPE_WANTEDWP);
+        this->SetWaypointToMove(1);
+        this->MoveTo(VH_DOOR_ATTACK_POSITION.x, VH_DOOR_ATTACK_POSITION.y, VH_DOOR_ATTACK_POSITION.z, true);
+    }
+
+    void OnReachWP(uint32 iWaypointId, bool bForwards)
+    {
+        switch (iWaypointId)
+        {
+        case 0:
+            if (m_isIntroMob)
+                _unit->Despawn(500, 0);
+            else
+            {
+                // TODO: Door attack code
+            }
+            break;
+        }
     }
 
     void OnCombatStart(Unit* mTarget)
@@ -580,6 +598,11 @@ public:
 
                 if (m_spellsEnabled[i])
                 {
+                    if (!m_spells[i].instant)
+                    {
+                        this->StopMovement();
+                    }
+
                     m_spells[i].casttime = m_spells[i].cooldown;
                     target = _unit->GetAIInterface()->getNextTarget();
                     switch (m_spells[i].targettype)
@@ -603,6 +626,7 @@ public:
                     }
 
                     m_spellsEnabled[i] = false;
+
                     return;
                 }
 

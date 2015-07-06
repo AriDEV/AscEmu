@@ -21,6 +21,7 @@
 
 const Location VH_ENTRANCE = { 1806.955566f, 803.851807f, 44.363323f, 0.0f };
 const Location VH_PLAYER_TELEPORT = { 1830.531006f, 803.939758f, 44.340508f, 6.281611f };
+const Location VH_DOOR_ATTACK_POSITION = { 1829.585083f, 804.067261f, 44.357708f, 0.006668f };
 const Location IntroPortals[] = {
     { 1878.363770f, 845.572144f, 43.333664f, 4.825092f }, // Left portal
     { 1890.527832f, 758.085510f, 47.666927f, 1.714914f }, // Right portal
