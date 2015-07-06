@@ -108,7 +108,7 @@ MoonScriptCreatureAI::~MoonScriptCreatureAI()
 
 bool MoonScriptCreatureAI::GetCanMove()
 {
-    return _unit->GetAIInterface()->m_canMove;
+    return (_unit->GetAIInterface()->m_canMove && (_unit->GetCurrentSpell() == nullptr));
 };
 
 void MoonScriptCreatureAI::SetCanMove(bool pCanMove)

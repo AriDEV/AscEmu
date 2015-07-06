@@ -1660,7 +1660,7 @@ float AIInterface::_CalcAggroRange(Unit* target)
 
 void AIInterface::_CalcDestinationAndMove(Unit* target, float dist)
 {
-    if (!m_canMove || m_Unit->IsStunned())
+    if (!m_canMove || m_Unit->IsStunned() || m_Unit->IsCasting() /* TODO: Checks to allow casts while moving for certain spells */)
     {
         StopMovement(0); //Just Stop
         return;
@@ -1880,7 +1880,7 @@ bool AIInterface::StopMovement(uint32 time)
 
 bool AIInterface::MoveTo(float x, float y, float z, float o)
 {
-    if (!m_canMove || m_Unit->IsStunned())
+    if (!m_canMove || m_Unit->IsStunned() || m_Unit->IsCasting() /* TODO: Checks to allow casts while moving for certain spells */)
     {
         StopMovement(0); //Just Stop
         return false;
