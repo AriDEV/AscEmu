@@ -4040,7 +4040,7 @@ static Transformation Descend[] =
 
 // Paths
 // Eye Beam stuff
-static Location EyeBeamPaths[] =
+static Movement::Location EyeBeamPaths[] =
 {
     { 642.240601f, 297.297180f, 354.423401f },
     { 641.197449f, 314.330963f, 354.300262f },
@@ -4053,7 +4053,7 @@ static Location EyeBeamPaths[] =
 };
 
 // Akama stuff
-static Location ToIllidan[] =
+static Movement::Location ToIllidan[] =
 {
     {  },
     { 660.248596f, 330.695679f, 271.688110f, 1.243284f },
@@ -4079,7 +4079,7 @@ static Location ToIllidan[] =
 };
 
 // Illidan stuff
-static Location ForIllidan[] =
+static Movement::Location ForIllidan[] =
 {
     {  },
     { 709.783203f, 305.073883f, 362.988770f, 1.546307f },    // Middle pos
@@ -4088,7 +4088,7 @@ static Location ForIllidan[] =
     { 680.798157f, 305.648743f, 353.192200f, 3.196716f }    // Land
 };
 
-static Location UnitPos[] =
+static Movement::Location UnitPos[] =
 {
     { 676.717346f, 322.445251f, 354.153320f, 5.732623f },    // Blade 1
     { 677.368286f, 285.374725f, 354.242157f, 5.645614f }    // Blade 2
@@ -5456,7 +5456,7 @@ class MaievAI : public MoonScriptBossAI
                                 X -= cosf(IllidanO);
                                 Y -= sinf(IllidanO);
 
-                                Location pCoords;
+                                Movement::Location pCoords;
                                 pCoords.x = IllidanX - X;
                                 pCoords.y = IllidanY - Y;
                                 pCoords.z = IllidanZ;

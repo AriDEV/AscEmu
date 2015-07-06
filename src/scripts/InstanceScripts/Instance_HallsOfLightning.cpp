@@ -312,7 +312,7 @@ class GeneralBjarngrimAI : public MoonScriptBossAI
 };
 
 
-/*static Location MoltenGolemCoords[]=
+/*static Movement::Location MoltenGolemCoords[]=
 {
 { 1335.296265f, -89.237503f, 56.717800f, 1.994538f },
 { 1340.615234f, -89.083313f, 56.717800f, 0.028982f },
@@ -470,7 +470,7 @@ class Volkhan : public MoonScriptCreatureAI
 
     SpellDesc* mTemper;
     SpellDesc* mStomp;
-    Location m_cVolkhanWP;
+    Movement::Location m_cVolkhanWP;
     bool m_bStomp;
     int32 mStompTimer;
     int32 mPhase;

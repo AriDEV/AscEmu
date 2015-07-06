@@ -961,7 +961,7 @@ void SpellFunc_AnubRekhanCorpseScarabsPlayer(SpellDesc* pThis, MoonScriptCreatur
     AnubRekhanAI* AnubRekhan = (pCreatureAI != NULL) ? TO< AnubRekhanAI* >(pCreatureAI) : NULL;
     if (AnubRekhan != NULL)
     {
-        std::vector< pair< Player* , Location > > PlayerCorpses;
+        std::vector< pair< Player* , Movement::Location > > PlayerCorpses;
         Player* PlayerPtr = NULL;
         LocationVector spawnLocation;
         for (set< Object* >::iterator Iter = AnubRekhan->GetUnit()->GetInRangePlayerSetBegin(); Iter != AnubRekhan->GetUnit()->GetInRangePlayerSetEnd(); ++Iter)
@@ -998,7 +998,7 @@ void SpellFunc_AnubRekhanCorpseScarabsPlayer(SpellDesc* pThis, MoonScriptCreatur
             if (AnubRekhan->GetUnit()->CalcDistance(spawnLocation) > 60.0f)
                 continue;
 
-            Location ObjectCoords;
+            Movement::Location ObjectCoords;
             ObjectCoords.x = spawnLocation.x;
             ObjectCoords.y = spawnLocation.y;
             ObjectCoords.z = spawnLocation.z;

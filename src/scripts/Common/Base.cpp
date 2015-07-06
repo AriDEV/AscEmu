@@ -945,7 +945,7 @@ if (result <= pPercentChance)
 LootMgr::getSingleton().AddLoot(pTarget->GetLoot(), pItemID, 1, 1, 0);
 }*/
 
-WayPoint* MoonScriptCreatureAI::CreateWaypoint(int pId, uint32 pWaittime, uint32 pMoveFlag, Location pCoords)
+WayPoint* MoonScriptCreatureAI::CreateWaypoint(int pId, uint32 pWaittime, uint32 pMoveFlag, Movement::Location pCoords)
 {
     WayPoint* wp = _unit->CreateWaypointStruct();
     wp->id = pId;

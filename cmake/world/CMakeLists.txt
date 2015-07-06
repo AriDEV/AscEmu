@@ -1,6 +1,8 @@
 PROJECT(world)
 SET( prefix ${ROOT_PATH}/src/world )
 SET(sources
+	Movement/MovementCommon.cpp
+	Movement/Creatures/MovementSpline.cpp
     DBC/DBCStores.cpp
     AchievementMgr.cpp 
     CollideInterface.cpp 
@@ -169,6 +171,8 @@ SET(sources
     Warrior.cpp )
 
 SET( headers
+	Movement/MovementCommon.hpp
+	Movement/Creatures/MovementSpline.hpp
     AchievementMgr.h
     AddonMgr.h
     AIInterface.h

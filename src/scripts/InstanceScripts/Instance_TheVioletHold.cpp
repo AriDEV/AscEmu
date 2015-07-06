@@ -19,14 +19,14 @@
 #include "Setup.h"
 #include "Instance_TheVioletHold.h"
 
-struct Location EventPreGuardSP[] = //PortalGuard spwns
+struct Movement::Location EventPreGuardSP[] = //PortalGuard spwns
 {
     { 1888.046265f, 761.654053f, 47.667f, 2.2332f }, // [0] left
     { 1928.545532f, 803.849731f, 52.411f, 3.1223f }, // [1] center
     { 1878.080933f, 844.850281f, 43.334f, 4.2376f }  // [2] right
 };
 
-struct Location EventPreGuardWP[] = //PortalGuard WPs
+struct Movement::Location EventPreGuardWP[] = //PortalGuard WPs
 {
     { 1858.386353f, 812.804993f, 42.9995f, 4.2376f }, // [0] left
     { 1861.916382f, 803.873230f, 43.6728f, 3.1223f }, // [1] center
