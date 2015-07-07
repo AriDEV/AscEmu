@@ -29,17 +29,15 @@ namespace Packets
         protected:
             WoWGuid m_Guid;
             uint8 m_unk0;
-            float m_x;
-            float m_y;
-            float m_z;
+            ::Movement::Location m_point;
             uint32 m_splineId;
             ::Movement::Spline::MonsterMoveFaceType m_moveType;
             uint32 m_splineFlags;
             ::Movement::Spline::SplineAnimation m_splineAnimation;
             int32 m_splineDuration;
             ::Movement::Spline::SplineParabolic m_splineParabolic;
-
-
+            uint32 m_pointCount;
+            std::vector<::Movement::Location> m_locations;
 
         public:
             SmsgMonsterMove();
