@@ -26,7 +26,8 @@ namespace Movement
     namespace Spline
     {
         MoveSpline::MoveSpline() :
-            m_currentSplineIndex(0xFFFFFFFF)
+            m_currentSplineIndex(0xFFFFFFFF),
+            m_splineFaceType()
         {
 
         }
@@ -145,6 +146,13 @@ namespace Movement
         {
             m_splinePoints.clear();
             m_currentSplineIndex = 1;
+            
+            m_splineFaceType.SetFlag(MonsterMoveInvalid);
+            m_splineFaceType.SetAngle(0);
+            m_splineFaceType.SetGuid(0);
+            m_splineFaceType.SetX(0);
+            m_splineFaceType.SetY(0);
+            m_splineFaceType.SetZ(0);
         }
 
         void MoveSpline::AddSplinePoint(::Movement::Spline::SplinePoint pSplinePoint)
