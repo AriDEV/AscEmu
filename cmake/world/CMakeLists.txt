@@ -2,7 +2,8 @@ PROJECT(world)
 SET( prefix ${ROOT_PATH}/src/world )
 SET(sources
 	Movement/MovementCommon.cpp
-	Movement/Creatures/MovementSpline.cpp
+	Packets/Movement/CreatureMovement.cpp
+	Packets/ManagedPacket.cpp
     DBC/DBCStores.cpp
     AchievementMgr.cpp 
     CollideInterface.cpp 
@@ -172,7 +173,12 @@ SET(sources
 
 SET( headers
 	Movement/MovementCommon.hpp
-	Movement/Creatures/MovementSpline.hpp
+	Movement/Spline/MovementSpline.hpp
+	Movement/Spline/MovementSplineMoveType.hpp
+	Movement/Spline/MovementSplineDefines.hpp
+	Packets/Movement/CreatureMovement.hpp
+	Packets/Movement/SmsgMonsterMove.hpp
+	Packets/ManagedPacket.hpp
     AchievementMgr.h
     AddonMgr.h
     AIInterface.h
