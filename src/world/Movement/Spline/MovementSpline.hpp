@@ -47,6 +47,7 @@ namespace Movement
 
         public:
             ::Movement::Spline::MonsterMoveFaceType m_splineFaceType;
+            uint32 m_currentSplineTotalMoveTime;
 
             void SetSplineFlag(uint32 pFlags);
             uint32 HasSplineFlag(uint32 pFlags);
@@ -72,6 +73,7 @@ namespace Movement
             ::Movement::Spline::SplinePoint* GetPreviousSplinePoint();
 
             bool IsSplineMoveDone();
+            bool IsSplineEmpty();
 
             uint32 GetSplineFlags() { return m_splineFlags; }
             MoveSpline();

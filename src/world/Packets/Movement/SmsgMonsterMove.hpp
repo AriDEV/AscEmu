@@ -27,7 +27,7 @@ namespace Packets
 {
     namespace Movement
     {
-        class SmsgMonsterMove : Packets::ManagedPacket
+        class SmsgMonsterMove : public Packets::ManagedPacket
         {
         public:
             WoWGuid m_Guid;
