@@ -22,6 +22,7 @@
 
 #include "StdAfx.h"
 #include "MovementSplineDefines.hpp"
+#include "SplineFlags.hpp"
 #include "G3D/Vector3.h"
 
 namespace Movement
@@ -41,7 +42,7 @@ namespace Movement
         class MoveSpline
         {
         protected:
-            uint32 m_splineFlags;
+            ::Movement::Spline::SplineFlags m_splineFlags;
             std::vector<::Movement::Spline::SplinePoint> m_splinePoints;
             uint32 m_currentSplineIndex;
 
@@ -77,7 +78,7 @@ namespace Movement
             bool IsSplineMoveDone();
             bool IsSplineEmpty();
 
-            uint32 GetSplineFlags() { return m_splineFlags; }
+            uint32 GetSplineFlags();
             MoveSpline();
             MoveSpline(uint32 pInitialFlags);
         };
