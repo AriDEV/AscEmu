@@ -23,7 +23,12 @@
 
 namespace Movement
 {
-    UnitMovementManager::UnitMovementManager()
+    UnitMovementManager::UnitMovementManager() : m_spline()
+    {
+
+    }
+
+    UnitMovementManager::UnitMovementManager(Spline::MoveSpline pSpline) : m_spline(pSpline)
     {
 
     }
