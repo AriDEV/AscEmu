@@ -20,8 +20,9 @@
 #ifndef _MOVEMENT_SPLINE_H
 #define _MOVEMENT_SPLINE_H
 
-#include "MovementSplineDefines.hpp"
 #include "StdAfx.h"
+#include "MovementSplineDefines.hpp"
+#include "G3D/Vector3.h"
 
 namespace Movement
 {

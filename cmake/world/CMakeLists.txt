@@ -3,6 +3,7 @@ SET( prefix ${ROOT_PATH}/src/world )
 SET(sources
     Movement/MovementCommon.cpp
     Movement/Spline/MovementSpline.cpp
+    Movement/UnitMovementManager.cpp
     Packets/Movement/CreatureMovement.cpp
     Packets/ManagedPacket.cpp
     DBC/DBCStores.cpp

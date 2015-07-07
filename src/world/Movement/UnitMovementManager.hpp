@@ -20,10 +20,14 @@
 #ifndef _UNIT_MOVEMENT_MANAGER_H
 #define _UNIT_MOVEMENT_MANAGER_H
 
+#include "StdAfx.h"
+#include "Movement/Spline/MovementSpline.hpp"
+
 namespace Movement
 {
     class UnitMovementManager
     {
+        Spline::MoveSpline m_spline;
 
     public:
         UnitMovementManager();

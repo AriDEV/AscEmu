@@ -21,6 +21,15 @@
 #ifndef _UNIT_H
 #define _UNIT_H
 
+#include "StdAfx.h"
+#include "Object.h"
+#include "SpellProc.h"
+#include "SummonHandler.h"
+#include "LootMgr.h"
+#include "Vehicle.h"
+
+class Object;
+class Unit;
 class AIInterface;
 class DynamicObject;
 
@@ -2015,6 +2024,7 @@ class SERVER_DECL Unit : public Object
         void UpdateAuraForGroup(uint8 slot);
         void HandleUpdateFieldChange(uint32 Index);
 
+        Movement::UnitMovementManager m_movementManager;
     protected:
         Unit();
         void RemoveGarbage();

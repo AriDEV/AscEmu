@@ -20,6 +20,9 @@
 #ifndef _PACKET_SMSG_MONSTER_MOVE_H
 #define _PACKET_SMSG_MONSTER_MOVE_H
 
+#include "StdAfx.h"
+#include "Opcodes.h"
+
 namespace Packets
 {
     namespace Movement

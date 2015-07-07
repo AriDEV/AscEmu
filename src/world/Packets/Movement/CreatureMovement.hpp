@@ -20,6 +20,9 @@
 #ifndef _PACKET_CREATURE_MOVEMENT_H
 #define _PACKET_CREATURE_MOVEMENT_H
 
+#include "StdAfx.h"
+#include "Unit.h"
+
 namespace Packets
 {
     namespace Movement

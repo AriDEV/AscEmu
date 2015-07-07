@@ -21,6 +21,11 @@
 #ifndef _OBJECT_H
 #define _OBJECT_H
 
+#include "StdAfx.h"
+#include "EventableObject.h"
+#include "UpdateMask.h"
+#include "UpdateFields.h"
+
 class Unit;
 class Group;
 
