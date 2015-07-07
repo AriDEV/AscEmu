@@ -25,7 +25,8 @@ namespace Movement
 {
     namespace Spline
     {
-        MoveSpline::MoveSpline()
+        MoveSpline::MoveSpline() :
+            m_currentSplineIndex(0xFFFFFFFF)
         {
 
         }
@@ -77,6 +78,8 @@ namespace Movement
             return returnSpline;
         }
 
+
+
         ::Movement::Spline::SplinePoint MoveSpline::GetLastSplinePoint()
         {
             if (m_splinePoints.size() < 1)
@@ -90,9 +93,58 @@ namespace Movement
             return &m_splinePoints;
         }
 
+        uint32 MoveSpline::GetCurrentSplineIndex()
+        {
+            return m_currentSplineIndex;
+        }
+
+        void MoveSpline::SetCurrentSplineIndex(uint32 pIndex)
+        {
+            m_currentSplineIndex = pIndex;
+        }
+
+        void MoveSpline::IncrementCurrentSplineIndex()
+        {
+            ++m_currentSplineIndex;
+        }
+
+        void MoveSpline::DecrementCurrentSplineIndex()
+        {
+            --m_currentSplineIndex;
+        }
+
+        ::Movement::Spline::SplinePoint* MoveSpline::GetSplinePoint(uint32 pPointIndex)
+        {
+            if (m_splinePoints.size() <= 0 || m_splinePoints.size() <= pPointIndex)
+                return &InvalidPoint;
+
+            return &m_splinePoints[pPointIndex];
+        }
+
+        ::Movement::Spline::SplinePoint* MoveSpline::GetNextSplinePoint()
+        {
+            return GetSplinePoint(m_currentSplineIndex + 1);
+        }
+
+        ::Movement::Spline::SplinePoint* MoveSpline::GetCurrentSplinePoint()
+        {
+            return GetSplinePoint(m_currentSplineIndex);
+        }
+
+        ::Movement::Spline::SplinePoint* MoveSpline::GetPreviousSplinePoint()
+        {
+            return GetSplinePoint(m_currentSplineIndex - 1);
+        }
+
+        bool MoveSpline::IsSplineMoveDone()
+        {
+            return m_currentSplineIndex >= m_splinePoints.size();
+        }
+
         void MoveSpline::ClearSpline()
         {
             m_splinePoints.clear();
+            m_currentSplineIndex = 1;
         }
 
         void MoveSpline::AddSplinePoint(::Movement::Spline::SplinePoint pSplinePoint)
