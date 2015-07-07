@@ -174,7 +174,6 @@ SET(sources
 SET( headers
     Movement/MovementCommon.hpp
     Movement/Spline/MovementSpline.hpp
-    Movement/Spline/MovementSplineMoveType.hpp
     Movement/Spline/MovementSplineDefines.hpp
     Packets/Movement/CreatureMovement.hpp
     Packets/Movement/SmsgMonsterMove.hpp
