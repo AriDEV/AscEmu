@@ -22,6 +22,13 @@
 
 namespace Movement
 {
+    struct Point
+    {
+        float x;
+        float y;
+        float z;
+    };
+
     struct Location
     {
         float x;

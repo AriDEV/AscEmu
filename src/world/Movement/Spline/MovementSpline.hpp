@@ -20,16 +20,26 @@
 #ifndef _MOVEMENT_SPLINE_H
 #define _MOVEMENT_SPLINE_H
 
+#include "MovementSplineDefines.hpp"
 #include "StdAfx.h"
 
 namespace Movement
 {
     namespace Spline
     {
+        //Assume previous point can be reached through linked list or current creature position.
+        struct SplinePoint
+        {
+            G3D::Vector3 pos;
+            uint32 setoff;      /// mstime when npc set off of this point
+            uint32 arrive;      /// mstime the npc reaches the destination
+        };
+
         class MoveSpline
         {
         protected:
             uint32 m_splineFlags;
+            std::vector<::Movement::Spline::SplinePoint> m_splinePoints;
 
         public:
             void SetSplineFlag(uint32 pFlags) { m_splineFlags = pFlags; }

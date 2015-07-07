@@ -17,15 +17,17 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PACKET_CREATURE_MOVEMENT_H
-#define _PACKET_CREATURE_MOVEMENT_H
+#ifndef _UNIT_MOVEMENT_MANAGER_H
+#define _UNIT_MOVEMENT_MANAGER_H
 
-namespace Packets
+namespace Movement
 {
-    namespace Movement
+    class UnitMovementManager
     {
-        void SendMoveToPacket(Unit* pUnit);
-    }
+
+    public:
+        UnitMovementManager();
+    };
 }
 
-#endif // _PACKET_CREATURE_MOVEMENT_H
+#endif // _UNIT_MOVEMENT_MANAGER_H
