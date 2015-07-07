@@ -30,8 +30,14 @@ namespace Movement
     {
         struct SplineFlags
         {
+        protected:
+            void UnsetAllFacingFlags();
         public:
             uint32 m_splineFlags;
+
+            void SetFacingPointFlag();
+            void SetFacingTargetFlag();
+            void SetFacingAngleFlag();
         };
     }
 }

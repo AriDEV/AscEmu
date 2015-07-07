@@ -21,6 +21,7 @@
 #define _MOVEMENT_SPLINE_H
 
 #include "StdAfx.h"
+#include "Movement/MovementCommon.hpp"
 #include "MovementSplineDefines.hpp"
 #include "SplineFlags.hpp"
 #include "G3D/Vector3.h"
@@ -74,6 +75,10 @@ namespace Movement
             ::Movement::Spline::SplinePoint* GetNextSplinePoint();
             ::Movement::Spline::SplinePoint* GetCurrentSplinePoint();
             ::Movement::Spline::SplinePoint* GetPreviousSplinePoint();
+
+            void SetFacing(::Movement::Point pPoint);
+            void SetFacing(uint64 pGuid);
+            void SetFacing(float pAngle);
 
             bool IsSplineMoveDone();
             bool IsSplineEmpty();

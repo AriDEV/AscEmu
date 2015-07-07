@@ -87,8 +87,6 @@ namespace Movement
             return returnSpline;
         }
 
-
-
         ::Movement::Spline::SplinePoint MoveSpline::GetLastSplinePoint()
         {
             if (m_splinePoints.size() < 1)
@@ -172,6 +170,29 @@ namespace Movement
         void MoveSpline::AddSplinePoint(::Movement::Spline::SplinePoint pSplinePoint)
         {
             m_splinePoints.push_back(pSplinePoint);
+        }
+
+        void MoveSpline::SetFacing(::Movement::Point pPoint)
+        {
+            m_splineFlags.SetFacingPointFlag();
+            m_splineFaceType.SetFlag(::Movement::Spline::MonsterMoveFacingLocation);
+            m_splineFaceType.SetX(pPoint.x);
+            m_splineFaceType.SetY(pPoint.y);
+            m_splineFaceType.SetZ(pPoint.z);
+        }
+
+        void MoveSpline::SetFacing(uint64 pGuid)
+        {
+            m_splineFlags.SetFacingTargetFlag();
+            m_splineFaceType.SetFlag(::Movement::Spline::MonsterMoveFacingTarget);
+            m_splineFaceType.SetGuid(pGuid);
+        }
+
+        void MoveSpline::SetFacing(float pAngle)
+        {
+            m_splineFlags.SetFacingAngleFlag();
+            m_splineFaceType.SetFlag(::Movement::Spline::MonsterMoveFacingAngle);
+            m_splineFaceType.SetAngle(pAngle);
         }
     }
 }
