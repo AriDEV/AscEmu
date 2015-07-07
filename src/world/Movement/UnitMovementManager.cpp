@@ -23,7 +23,31 @@
 
 namespace Movement
 {
-    UnitMovementManager::UnitMovementManager() : m_spline()
+    void UnitMovementManager::ForceUpdate()
+    {
+        m_lastUpdateTick = 0;
+    }
+
+    void UnitMovementManager::Update(uint32 pLastUpdate)
+    {
+        if (!CanUpdate(pLastUpdate))
+            return;
+
+        m_lastUpdateTick = pLastUpdate;
+    }
+
+    bool UnitMovementManager::CanUpdate(uint32 pLastUpdate)
+    {
+        // If these are true then we can NOT update, so invert the result before returning
+        return !(m_spline.GetSplinePoints()->size() == 0 || pLastUpdate == m_lastUpdateTick);
+    }
+
+    bool UnitMovementManager::IsMovementFinished()
+    {
+        return m_lastUpdateTick == 0;
+    }
+
+    UnitMovementManager::UnitMovementManager() : m_spline(), m_lastUpdateTick(0)
     {
 
     }
