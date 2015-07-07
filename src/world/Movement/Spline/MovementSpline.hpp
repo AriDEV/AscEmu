@@ -48,6 +48,8 @@ namespace Movement
         public:
             ::Movement::Spline::MonsterMoveFaceType m_splineFaceType;
             uint32 m_currentSplineTotalMoveTime;
+            float m_splineTrajectoryVertical;
+            uint32 m_splineTrajectoryTime;
 
             void SetSplineFlag(uint32 pFlags);
             uint32 HasSplineFlag(uint32 pFlags);

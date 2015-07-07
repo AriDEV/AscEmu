@@ -28,7 +28,9 @@ namespace Movement
         MoveSpline::MoveSpline() :
             m_currentSplineIndex(0xFFFFFFFF),
             m_splineFaceType(),
-            m_currentSplineTotalMoveTime(0)
+            m_currentSplineTotalMoveTime(0),
+            m_splineTrajectoryVertical(0),
+            m_splineTrajectoryTime(0)
         {
 
         }

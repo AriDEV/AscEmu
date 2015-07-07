@@ -549,7 +549,7 @@ class SERVER_DECL AIInterface : public Arcemu::IUpdatable
         //uint32 m_currentMoveSplineIndex;
         //uint32 m_currentSplineUpdateCounter;
         //float m_currentSplineFinalOrientation;
-        float m_splinetrajectoryVertical;
+        //float m_splinetrajectoryVertical;
         uint32 m_splinetrajectoryTime;
         //uint32 m_currentSplineTotalMoveTime;
         uint32 m_splinePriority;
