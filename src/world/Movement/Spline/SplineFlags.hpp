@@ -67,7 +67,7 @@ namespace Movement
             void UnsetAllFacingFlags();
         public:
             SplineFlagsData m_splineFlagsRaw;
-            //uint32 m_splineFlags;
+            uint32 GetFlagsForMonsterMove();
 
             void SetFacingPointFlag();
             void SetFacingTargetFlag();
