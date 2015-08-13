@@ -21,6 +21,16 @@
 #include "StdAfx.h"
 #include "TerrainMgr.h"
 
+uint16 TerrainHolder::GetAreaFlagWithoutAdtId(float x, float y)
+{
+    auto tile = this->GetTile(x, y);
+    if (tile)
+    {
+        return tile->m_map.GetArea(x, y);
+    }
+
+    return 0;
+}
 
 TerrainTile* TerrainHolder::GetTile(float x, float y)
 {
@@ -28,43 +38,6 @@ TerrainTile* TerrainHolder::GetTile(float x, float y)
     int32 ty = (int32)(32 - (y / TERRAIN_TILE_SIZE));
 
     return GetTile(tx, ty);
-}
-
-AreaTable* TerrainHolder::GetArea(float x, float y, float z)
-{
-    AreaTable* ret = NULL;
-    float vmap_z = z;
-    VMAP::IVMapManager* vmgr = VMAP::VMapFactory::createOrGetVMapManager();
-
-    uint32 flags;
-    int32 adtid, rootid, groupid;
-
-    if (vmgr->getAreaInfo(m_mapid, x, y, vmap_z, flags, adtid, rootid, groupid))
-    {
-        float adtz = GetADTLandHeight(x, y);
-
-        if (adtz > vmap_z && z + 1 > adtz)
-            return GetArea2D(x, y);
-
-        WMOAreaTableEntry* wmoArea = sWorld.GetWMOAreaData(rootid, adtid, groupid);
-        if (wmoArea != NULL)
-            ret = dbcArea.LookupEntryForced(wmoArea->areaId);
-    }
-
-    if (ret == NULL)  //fall back to 2d if no vmaps or vmap has no areaid set
-        ret = GetArea2D(x, y);
-    return ret;
-}
-
-AreaTable* TerrainHolder::GetArea2D(float x, float y)
-{
-    uint32 exploreFlag = GetAreaFlag(x, y);
-
-    std::map<uint32, AreaTable*>::iterator itr = sWorld.mAreaIDToTable.find(exploreFlag);
-
-    if (itr == sWorld.mAreaIDToTable.end())
-        return NULL;
-    return dbcArea.LookupEntryForced(itr->second->AreaId);
 }
 
 TerrainTile::~TerrainTile()
@@ -265,6 +238,25 @@ float TileMap::GetHeight(float x, float y)
     else if (m_heightMapFlags & MAP_HEIGHT_AS_INT8)
         return GetHeightB(x, y, x_int, y_int);
     return GetHeightF(x, y, x_int, y_int);
+}
+
+const bool TerrainHolder::GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id)
+{
+    float vmap_z = z;
+    auto vmap_manager = VMAP::VMapFactory::createOrGetVMapManager();
+    if (vmap_manager->getAreaInfo(m_mapid, x, y, vmap_z, mogp_flags, adt_id, root_id, group_id))
+    {
+        if (auto tile = this->GetTile(x, y))
+        {
+            float map_height = tile->m_map.GetHeight(x, y);
+            if (z + 2.0f > map_height && map_height > vmap_z)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 void TileMap::Load(char* filename)

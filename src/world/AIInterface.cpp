@@ -1479,16 +1479,15 @@ bool AIInterface::FindFriends(float dist)
     if (family == UNIT_TYPE_HUMANOID && summonguard > 0 && getMSTime() > m_guardTimer && !IS_INSTANCE(m_Unit->GetMapId()))
     {
         m_guardTimer = getMSTime() + 15000;
-        uint16 AreaId = m_Unit->GetMapMgr()->GetAreaID(m_Unit->GetPositionX(), m_Unit->GetPositionY());
-        AreaTable* at = dbcArea.LookupEntryForced(AreaId);
+        auto at = m_Unit->GetArea();
         if (!at)
             return result;
 
         ZoneGuardEntry* zoneSpawn;
-        if (at->ZoneId != 0)
-            zoneSpawn = ZoneGuardStorage.LookupEntry(at->ZoneId);
+        if (at->zone != 0)
+            zoneSpawn = ZoneGuardStorage.LookupEntry(at->zone);
         else
-            zoneSpawn = ZoneGuardStorage.LookupEntry(at->AreaId);
+            zoneSpawn = ZoneGuardStorage.LookupEntry(at->id);
 
         if (!zoneSpawn) return result;
 
@@ -2604,7 +2603,7 @@ void AIInterface::CastSpell(Unit* caster, SpellEntry* spellInfo, SpellCastTarget
     // Stop movement while casting.
     m_AIState = STATE_CASTING;
 #ifdef _AI_DEBUG
-    LOG_DEBUG("AI DEBUG: Unit %u casting spell %s on target "I64FMT, caster->GetEntry(),
+    LOG_DEBUG("AI DEBUG: Unit %u casting spell %s on target " I64FMT " ", caster->GetEntry(),
               sSpellStore.LookupString(spellInfo->Name), targets.m_unitTarget);
 #endif
 

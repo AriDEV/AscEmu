@@ -36,6 +36,7 @@ m_hiCorpseGuid(0),
 m_hiGuildId(0),
 m_hiPetGuid(0),
 m_hiArenaTeamId(0),
+TransportersCount(0),
 m_hiPlayerGuid(1)
 {
     memset(m_InstanceBossInfoMap, 0, sizeof(InstanceBossInfoMap*) * NUM_MAPS);
@@ -2850,19 +2851,13 @@ void ObjectMgr::AddTransport(Transporter* pTransporter)
 
 Transporter* ObjectMgr::GetTransporterByEntry(uint32 entry)
 {
-    Transporter* rv = 0;
+    Transporter* ret = nullptr;
     _TransportLock.Acquire();
-    HM_NAMESPACE::hash_map<uint32, Transporter*>::iterator itr = mTransports.begin();
-    for (; itr != mTransports.end(); ++itr)
-    {
-        if (itr->second->GetEntry() == entry)
-        {
-            rv = itr->second;
-            break;
-        }
-    }
+    auto transporter = mTransports.find(entry);
+    if (transporter != mTransports.end())
+        ret = transporter->second;
     _TransportLock.Release();
-    return rv;
+    return ret;
 }
 
 void ObjectMgr::LoadGuildCharters()
@@ -2923,6 +2918,12 @@ Charter::Charter(Field* fields)
         if (Signatures[i])
             ++SignatureCount;
     }
+
+    // Unknown... really?
+    Unk1 = 0;
+    Unk2 = 0;
+    Unk3 = 0;
+    PetitionSignerCount = 0;
 }
 
 void Charter::AddSignature(uint32 PlayerGuid)
@@ -4036,7 +4037,7 @@ void ObjectMgr::EventScriptsUpdate(Player* plr, uint32 next_event)
             {
             case static_cast<uint8>(ScriptCommands::SCRIPT_COMMAND_ACTIVATE_OBJECT):
             {
-                if ((itr->second.x || itr->second.y || itr->second.z) == NULL)
+                if ((itr->second.x || itr->second.y || itr->second.z) == 0)
                 {
                     Object* target = plr->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(plr->GetPositionX(), plr->GetPositionY(), plr->GetPositionZ(), itr->second.data_1);
                     if (target == NULL)
@@ -4071,7 +4072,7 @@ void ObjectMgr::EventScriptsUpdate(Player* plr, uint32 next_event)
             }
         }
 
-        if (itr->second.nextevent != NULL)
+        if (itr->second.nextevent != 0)
         {
             objmgr.CheckforScripts(plr, itr->second.nextevent);
         }

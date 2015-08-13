@@ -268,7 +268,7 @@ class RageWinterchillAI : public CreatureAIScript
         {
             if (_unit->GetHealthPct() > 0)
             {
-                switch (rand() % 5)
+                switch (RandomUInt(4))
                 {
                     case 0:
                         _unit->SendScriptTextChatMessage(1586);     // Crumble and rot!
@@ -281,6 +281,8 @@ class RageWinterchillAI : public CreatureAIScript
                         break;
                     case 3:
                         _unit->SendScriptTextChatMessage(1585);     // Victory to the Legion!");
+                        break;
+                    default:
                         break;
                 }
             }
@@ -493,7 +495,7 @@ class AnetheronAI : public CreatureAIScript
         {
             if (_unit->GetHealthPct() > 0)
             {
-                switch (rand() % 3)
+                switch (RandomUInt(2))
                 {
                     case 0:
                         _unit->SendScriptTextChatMessage(1560);     // Your hopes are lost.
@@ -716,7 +718,7 @@ class KazrogalAI : public CreatureAIScript
         {
             if (_unit->GetHealthPct() > 0)
             {
-                switch (rand() % 4)
+                switch (RandomUInt(3))
                 {
                     case 0:
                         _unit->SendScriptTextChatMessage(1580);     // Your death will be a painful one.
@@ -961,7 +963,7 @@ class AzgalorAI : public CreatureAIScript
         {
             if (_unit->GetHealthPct() > 0)
             {
-                switch (rand() % 3)
+                switch (RandomUInt(2))
                 {
                     case 0:
                         _unit->SendScriptTextChatMessage(1571);     // Reesh, hokta!
@@ -1397,7 +1399,7 @@ class ArchimondeAI : public CreatureAIScript
         {
             if (_unit->GetHealthPct() > 0)    // Hack to prevent double yelling (OnDied and OnTargetDied when creature is dying)
             {
-                switch (rand() % 3)
+                switch (RandomUInt(2))
                 {
                     case 0:
                         _unit->SendScriptTextChatMessage(1597);     // Your soul will languish for eternity.
@@ -1416,7 +1418,7 @@ class ArchimondeAI : public CreatureAIScript
                     uint32 SpellID = 0;
                     if (mTarget->getClass() == WARRIOR || mTarget->getClass() == ROGUE || mTarget->getClass() == MAGE)
                         SpellID = SOUL_CHARGEO;
-                    if (mTarget->getClass() == PRIEST || mTarget->getClass() == PALADIN || mTarget->getClass() == WARLOCK)
+                    else if (mTarget->getClass() == PRIEST || mTarget->getClass() == PALADIN || mTarget->getClass() == WARLOCK)
                         SpellID = SOUL_CHARGER;
                     else
                         SpellID = SOUL_CHARGEG;

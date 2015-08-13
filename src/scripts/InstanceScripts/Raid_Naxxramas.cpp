@@ -360,7 +360,7 @@ void SpellFunc_MaexxnaWebWrap(SpellDesc* pThis, MoonScriptCreatureAI* pCreatureA
         if (pTarget == NULL || !pTarget->IsPlayer() || pTarget->HasAura(MAEXXNA_WEB_WRAP) || Maexxna->GetUnit() == NULL || Maexxna->GetUnit()->GetMapMgr() == NULL)
             return;
 
-        uint32 Id = RandomUInt(2);
+        uint32 Id = RandomUInt(1);
         if (!Maexxna->mLeftWall)
             Id += 3;
 
@@ -1354,7 +1354,7 @@ void NothThePlaguebringerAI::AIUpdate()
             if (IsHeroic() && IsTimerFinished(mBlinkTimer))
             {
                 CastSpellNowNoScheduling(mCriple);
-                ResetTimer(mBlinkTimer, 28000 + RandomUInt(12) * 1000);
+                ResetTimer(mBlinkTimer, 28000 + (rand() % 12 +1) * 1000);
             };
         };
 
@@ -1374,7 +1374,7 @@ void NothThePlaguebringerAI::AIUpdate()
             PlaguedWarriorAI* WarriorAI = NULL;
             for (uint32 i = 0; i < SkelLimit; ++i)
             {
-                Id = RandomUInt(2);
+                Id = rand () % SkelLimit;
                 if (PosTaken[Id])
                 {
                     for (uint32 j = 0; j < 3; ++j)
@@ -1412,7 +1412,7 @@ void NothThePlaguebringerAI::AIUpdate()
             ResetTimer(mPhaseSwitchTimer, 70000);
             ResetTimer(mSkeletonTimer, 8000);
             if (IsHeroic())
-                ResetTimer(mBlinkTimer, 28000 + RandomUInt(12) * 1000);
+                ResetTimer(mBlinkTimer, 28000 + (rand() % 12 + 1) * 1000);
 
             return;
         };
@@ -1437,7 +1437,7 @@ void NothThePlaguebringerAI::AIUpdate()
             PlaguedChampionAI* ChampionAI = NULL;
             for (uint32 i = 0; i < Champions; ++i)
             {
-                Id = RandomUInt(3);
+                Id = RandomUInt(1, 3);
                 if (PosTaken[Id])
                 {
                     for (uint32 j = 0; j < 4; ++j)
@@ -1465,7 +1465,7 @@ void NothThePlaguebringerAI::AIUpdate()
             PlaguedGuardianAI* GuardianAI = NULL;
             for (uint32 i = 0; i < SpawnLimit - Champions; ++i)
             {
-                Id = RandomUInt(3);
+                Id = RandomUInt(1, 3);
                 if (PosTaken[Id])
                 {
                     for (uint32 j = 0; j < 4; ++j)
@@ -1597,6 +1597,8 @@ PlaguedWarriorAI::PlaguedWarriorAI(Creature* pCreature) : MoonScriptCreatureAI(p
 {
     AddSpell(PLAGUED_WARRIOR_STRIKE, Target_Current, 10, 0, 5, 0, 8);
     AddSpell(PLAGUED_WARRIOR_CLEAVE, Target_Current, 10, 0, 10, 0, 8);
+
+    mNothAI = NULL;
 };
 
 void PlaguedWarriorAI::Destroy()
@@ -1624,7 +1626,9 @@ PlaguedChampionAI::PlaguedChampionAI(Creature* pCreature) : MoonScriptCreatureAI
     {
         AddSpell(PLAGUED_CHAMPION_MORTAL_STRIKE_NORMAL, Target_Current, 8, 0, 10, 0, 8);
         AddSpell(PLAGUED_CHAMPION_SHADOW_SHOCK_NORMAL, Target_Self, 10, 0, 10);
-    };
+    }
+
+    mNothAI = NULL;
 };
 
 void PlaguedChampionAI::Destroy()
@@ -1647,6 +1651,8 @@ PlaguedGuardianAI::PlaguedGuardianAI(Creature* pCreature) : MoonScriptCreatureAI
         AddSpell(PLAGUED_GUARDIAN_ARCANE_EXPLOSION_HEROIC, Target_Self, 10, 1.5, 10);
     else
         AddSpell(PLAGUED_GUARDIAN_ARCANE_EXPLOSION_NORMAL, Target_Self, 10, 1.5, 10);
+
+    mNothAI = NULL;
 };
 
 void PlaguedGuardianAI::Destroy()
@@ -1961,7 +1967,7 @@ void LoathebAI::AIUpdate()
         SporeAI* Spore = NULL;
         for (uint32 i = 0; i < 3; ++i)
         {
-            Id = RandomUInt(3);
+            Id = rand () % 3 + 1;
             if (PosTaken[Id])
             {
                 for (uint32 j = 0; j < 4; ++j)

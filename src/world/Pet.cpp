@@ -295,6 +295,8 @@ Pet::Pet(uint64 guid) : Creature(guid)
     m_AISpellStore.clear();
     mSpells.clear();
     mPi = NULL;
+    m_Owner = NULL;
+    m_OwnerGuid = 0;
 }
 
 Pet::~Pet()
@@ -1929,15 +1931,8 @@ void Pet::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32 un
             else
                 team = TEAM_ALLIANCE;
 
-            uint32 AreaID = pVictim->GetMapMgr()->GetAreaID(pVictim->GetPositionX(), pVictim->GetPositionY());
-
-            if (AreaID == 0)
-                AreaID = GetZoneId(); // Failsafe for a shitty TerrainMgr
-
-            if (AreaID)
-            {
-                sWorld.SendZoneUnderAttackMsg(AreaID, static_cast<uint8>(team));
-            }
+            auto area = pVictim->GetArea();
+            sWorld.SendZoneUnderAttackMsg(area ? area->id : GetZoneId(), static_cast<uint8>(team));
         }
 
         pVictim->Die(this, damage, spellId);

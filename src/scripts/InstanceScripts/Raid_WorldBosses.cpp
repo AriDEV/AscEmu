@@ -1001,31 +1001,38 @@ class LethonAI : public CreatureAIScript
         void AIUpdate()
         {
             std::list<Player*> mTargets;
-            // M4ksiu: Someone who wrote this hadn't thought about it much, so it should be rewritten
+            // \todo Someone who wrote this hadn't thought about it much, so it should be rewritten
             Unit* Target = _unit->GetAIInterface()->getNextTarget();
             if (Target != NULL && !_unit->isInRange(Target, 20.0f))
                 _unit->CastSpell(Target, TELEPORT, true);
 
-            if ((_unit->GetHealthPct() == 25 && Shade3 == false) || (_unit->GetHealthPct() == 50 && Shade2 == false) || (_unit->GetHealthPct() == 75 && Shade1 == false))
+
+            //Made it like this because if lethon gets healed, he should spawn the adds again at the same pct. (Only spawn once at 75,50,25)
+            switch (_unit->GetHealthPct())
             {
-                //Made it like this because if lethon gets healed, he should spawn the adds again at the same pct. (Only spawn once at 75,50,25)
-                switch (_unit->GetHealthPct())
+                case 25:
                 {
-                    case 25:
+                    if (!Shade3)
                         Shade3 = true;
-                    case 50:
-                        Shade2 = true;
-                    case 75:
-                        Shade1 = true;
-                }
-                // Summon a spirit for each player
-                std::list<Player*>::iterator itr = mTargets.begin();
-                for (; itr != mTargets.end(); ++itr)
+                }break;
+                case 50:
                 {
-                    _unit->CastSpellAoF((*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), spells[4].info, spells[4].instant);
-                }
-                _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, spells[4].speech.c_str());
+                    if (!Shade2)
+                        Shade2 = true;
+                }break;
+                case 75:
+                {
+                    if (!Shade1)
+                        Shade1 = true;
+                }break;
             }
+            // Summon a spirit for each player
+            std::list<Player*>::iterator itr = mTargets.begin();
+            for (; itr != mTargets.end(); ++itr)
+            {
+                _unit->CastSpellAoF((*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), spells[4].info, spells[4].instant);
+            }
+            _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, spells[4].speech.c_str());
 
             float val = RandomFloat(100.0f);
             SpellCast(val);
@@ -1191,7 +1198,7 @@ class KruulAI : public CreatureAIScript
 
         KruulAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
-            nrspells = 6;
+            nrspells = 7;
             for (int i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
@@ -1260,7 +1267,7 @@ class KruulAI : public CreatureAIScript
             hounds_timer = 45;
             enrage = 0;
 
-            switch (rand() % 5)
+            switch (RandomUInt(4))
             {
                 case 0:
                     _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "Azeroth has cowered too long under our shadow! Now, feel the power of the Burning Crusade, and despair!");
@@ -1318,8 +1325,8 @@ class KruulAI : public CreatureAIScript
 
         void SummonHounds(Unit* mTarget)
         {
-            Rand = rand() % 15;
-            switch (rand() % 2)
+            Rand = RandomUInt(15);
+            switch (RandomUInt(1))
             {
                 case 0:
                     RandX = 0 - Rand;
@@ -1329,8 +1336,8 @@ class KruulAI : public CreatureAIScript
                     break;
             }
 
-            Rand = rand() % 15;
-            switch (rand() % 2)
+            Rand = RandomUInt(15);
+            switch (RandomUInt(1))
             {
                 case 0:
                     RandY = 0 - Rand;
@@ -1526,7 +1533,7 @@ class KazzakAI : public CreatureAIScript
 
         void OnCombatStart(Unit* mTarget)
         {
-            switch (rand() % 2)
+            switch (RandomUInt(1))
             {
                 case 0:
                     _unit->SendScriptTextChatMessage(374);      // All mortals will perish!
@@ -1542,7 +1549,7 @@ class KazzakAI : public CreatureAIScript
         {
             if (_unit->GetHealthPct() > 0)
             {
-                switch (rand() % 2)
+                switch (RandomUInt(1))
                 {
                     case 0:
                         _unit->SendScriptTextChatMessage(379);      // Contemptible wretch!
@@ -1581,13 +1588,15 @@ class KazzakAI : public CreatureAIScript
 
         void RandomSpeech()
         {
-            switch (rand() % 20)        // 10% chance should do, he talks a lot tbh =P
+            switch (RandomUInt(20))        // 10% chance should do, he talks a lot tbh =P
             {
                 case 0:
                     _unit->SendScriptTextChatMessage(383);      // Invaders, you dangle upon the precipice of oblivion! The Burning...
                     break;
                 case 1:
                     _unit->SendScriptTextChatMessage(384);      // Impudent whelps, you only delay the inevitable. Where one has fallen, ten shall rise. Such is the will of Kazzak...
+                    break;
+                default:
                     break;
             }
         }
@@ -1931,7 +1940,7 @@ class DoomwalkerAI : public CreatureAIScript
         {
             if (_unit->GetHealthPct() > 0)
             {
-                switch (rand() % 3)
+                switch (RandomUInt(2))
                 {
                     case 0:
                         _unit->SendScriptTextChatMessage(307);      // Threat level zero.
@@ -2021,7 +2030,7 @@ class DoomwalkerAI : public CreatureAIScript
                         if (m_spellcheck[0] == true)  //Earthquake
                         {
                             _unit->GetAIInterface()->WipeHateList();
-                            switch (rand() % 2)
+                            switch (RandomUInt(1))
                             {
                                 case 0:
                                     _unit->SendScriptTextChatMessage(303);      // Tectonic disruption commencing.
@@ -2034,7 +2043,7 @@ class DoomwalkerAI : public CreatureAIScript
                         if (m_spellcheck[3] == true)  //Overrun
                         {
                             _unit->GetAIInterface()->WipeHateList();
-                            switch (rand() % 2)
+                            switch (RandomUInt(1))
                             {
                                 case 0:
                                     _unit->SendScriptTextChatMessage(305);      // Trajectory locked.
@@ -2151,8 +2160,6 @@ class TeremusAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                int RandomSpeach;
-                RandomSpeach = rand() % 2;
                 for (int i = 0; i < nrspells; i++)
                 {
                     spells[i].casttime--;

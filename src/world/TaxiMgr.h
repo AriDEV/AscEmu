@@ -50,6 +50,12 @@ class TaxiPath
         {
             price = 0;
             id = 0;
+            m_length1 = 0;
+            m_map1 = 0;
+            m_length2 = 0;
+            m_map2 = 0;
+            to = 0;
+            from = 0;
         }
 
         ~TaxiPath()

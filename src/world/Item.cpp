@@ -45,6 +45,8 @@ Item::Item()//this is called when constructing as container
 
     for (uint32 i = 0; i < 3; ++i)
         OnUseSpellIDs[i] = 0;
+
+    m_isDirty = false;
 }
 
 void Item::Init(uint32 high, uint32 low)
@@ -1092,12 +1094,12 @@ uint32 Item::GenerateRandomSuffixFactor(ItemPrototype* m_itemProto)
     return long2int32(value);
 }
 
-string Item::GetItemLink(uint32 language = NULL)
+string Item::GetItemLink(uint32 language = 0)
 {
     return GetItemLinkByProto(GetProto(), language);
 }
 
-string GetItemLinkByProto(ItemPrototype* iProto, uint32 language = NULL)
+string GetItemLinkByProto(ItemPrototype* iProto, uint32 language = 0)
 {
     const char* ItemLink;
     char buffer[256];
@@ -1134,7 +1136,7 @@ string GetItemLinkByProto(ItemPrototype* iProto, uint32 language = NULL)
     }
 
     // try to get localized version
-    LocalizedItem* lit = (language > 0) ? sLocalizationMgr.GetLocalizedItem(iProto->ItemId, language) : NULL;
+    LocalizedItem* lit = (language > 0) ? sLocalizationMgr.GetLocalizedItem(iProto->ItemId, language) : 0;
 
     if (lit)
         snprintf(buffer, 256, "|%s|Hitem:%u:0:0:0:0:0:0:0|h[%s]|h|r", colour.c_str(), iProto->ItemId, lit->Name);

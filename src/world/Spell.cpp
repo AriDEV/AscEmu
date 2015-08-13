@@ -347,6 +347,7 @@ Spell::Spell(Object* Caster, SpellEntry* info, bool triggered, Aura* aur)
     m_magnetTarget = 0;
     Dur = 0;
     m_rune_avail_before = 0;
+    m_extraError = SPELL_EXTRA_ERROR_NONE;
 }
 
 Spell::~Spell()
@@ -1923,52 +1924,84 @@ void Spell::finish(bool successful)
     DecRef();
 }
 
-void Spell::SendCastResult(uint8 result)
+void Spell::WriteCastResult(WorldPacket& data, Player* caster, uint32 spellInfo, uint8 castCount, uint8 result, SpellExtraError extraError)
 {
-    uint32 Extra = 0;
-    if (result == SPELL_CANCAST_OK) return;
-
-    SetSpellFailed();
-
-    if (!m_caster->IsInWorld()) return;
-
-    Player* plr = p_caster;
-
-    if (!plr && u_caster)
-        plr = u_caster->m_redirectSpellPackets;
-    if (!plr) return;
-
-    // for some reason, the result extra is not working for anything, including SPELL_FAILED_REQUIRES_SPELL_FOCUS
+    data << uint8(castCount);       // cast count
+    data << uint32(spellInfo);      // Spell ID
+    data << uint8(result);          // The problem
     switch (result)
     {
         case SPELL_FAILED_REQUIRES_SPELL_FOCUS:
-            Extra = GetProto()->RequiresSpellFocus;
+            data << uint32(GetProto()->RequiresSpellFocus);
             break;
 
         case SPELL_FAILED_REQUIRES_AREA:
             if (GetProto()->RequiresAreaId > 0)
             {
                 AreaGroup* ag = dbcAreaGroup.LookupEntry(GetProto()->RequiresAreaId);
-                uint16 plrarea = plr->GetMapMgr()->GetAreaID(plr->GetPositionX(), plr->GetPositionY());
+                auto area = p_caster->GetArea();
                 for (uint8 i = 0; i < 7; i++)
-                    if (ag->AreaId[i] != 0 && ag->AreaId[i] != plrarea)
+                {
+                    if (ag->AreaId[i] != 0 && ag->AreaId[i] != area->id)
                     {
-                        Extra = ag->AreaId[i];
+                        data << uint32(ag->AreaId[i]);
                         break;
                     }
+                    else
+                        data << uint32(0);
+                }
             }
             break;
         case SPELL_FAILED_TOTEMS:
-            Extra = GetProto()->Totem[1] ? GetProto()->Totem[1] : GetProto()->Totem[0];
+            if (GetProto()->Totem[0])
+                data << uint32(GetProto()->Totem[0]);
+            if (GetProto()->Totem[1])
+                data << uint32(GetProto()->Totem[1]);
             break;
-
         case SPELL_FAILED_ONLY_SHAPESHIFT:
-            Extra = GetProto()->RequiredShapeShift;
+            data << uint32(GetProto()->RequiredShapeShift);
             break;
-            //case SPELL_FAILED_TOTEM_CATEGORY: seems to be fully client sided.
+        case SPELL_FAILED_CUSTOM_ERROR:
+            data << uint32(extraError);
+            break;
+        default:
+            break;
     }
+}
 
-    plr->SendCastResult(GetProto()->Id, result, extra_cast_number, Extra);
+void Spell::SendCastResult(Player* caster, uint8 castCount, uint8 result, SpellExtraError extraError)
+{
+    uint32 spellInfo = GetProto()->Id;
+
+    WorldPacket data(SMSG_CAST_FAILED, 1 + 4 + 1);
+    WriteCastResult(data, caster, spellInfo, castCount, result, extraError);
+
+    caster->GetSession()->SendPacket(&data);
+}
+
+void Spell::SetExtraCastResult(SpellExtraError result)
+{
+    m_extraError = result;
+}
+
+void Spell::SendCastResult(uint8 result)
+{
+    if (result == SPELL_CANCAST_OK)
+        return;
+
+    SetSpellFailed();
+
+    if (!m_caster->IsInWorld())
+        return;
+
+    Player* plr = p_caster;
+
+    if (!plr && u_caster)
+        plr = u_caster->m_redirectSpellPackets;
+    if (!plr)
+        return;
+
+    SendCastResult(p_caster, 0, result, m_extraError);
 }
 
 // uint16 0xFFFF
@@ -3289,8 +3322,8 @@ uint8 Spell::CanCast(bool tolerate)
          */
         if (GetProto()->Id == 7266)
         {
-            AreaTable* at = dbcArea.LookupEntry(p_caster->GetAreaID());
-            if (at->AreaFlags & AREA_CITY_AREA)
+            auto at = p_caster->GetArea();
+            if (at->flags & AREA_CITY_AREA)
                 return SPELL_FAILED_NO_DUELING;
             // instance & stealth checks
             if (p_caster->GetMapMgr() && p_caster->GetMapMgr()->GetMapInfo() && p_caster->GetMapMgr()->GetMapInfo()->type != INSTANCE_NULL)
@@ -3549,15 +3582,16 @@ uint8 Spell::CanCast(bool tolerate)
         if (GetProto()->RequiresAreaId > 0)
         {
             AreaGroup* ag = dbcAreaGroup.LookupEntry(GetProto()->RequiresAreaId);
-            uint32 plrarea = p_caster->GetMapMgr()->GetAreaID(p_caster->GetPositionX(), p_caster->GetPositionY());
-            if (plrarea != 0xFFFF)//disabling Area checks for maps with no Map_XY.bin file.
+            auto area = p_caster->GetArea();
+            for (i = 0; i < 7; ++i)
             {
-                AreaTable* at = dbcArea.LookupEntry(plrarea);
-                for (i = 0; i < 7; i++)
-                    if (ag->AreaId[i] == plrarea || (at->ZoneId != 0 && ag->AreaId[i] == at->ZoneId))    //we check both Area and Zone but only if Zone is a valid one, so != 0.
-                        break;
-                if (i == 7)
-                    return SPELL_FAILED_REQUIRES_AREA;
+                if (ag->AreaId[i] == area->id || (area->zone != 0 && ag->AreaId[i] == area->zone))
+                    break;
+            }
+
+            if (i == 7)
+            {
+                return SPELL_FAILED_REQUIRES_AREA;
             }
         }
 
@@ -3938,9 +3972,9 @@ uint8 Spell::CanCast(bool tolerate)
                     // allow attacks in duels
                     if (p_caster->DuelingWith != target && !isFriendly(p_caster, target))
                     {
-                        AreaTable* atCaster = dbcArea.LookupEntry(p_caster->GetAreaID());
-                        AreaTable* atTarget = dbcArea.LookupEntry(TO< Player* >(target)->GetAreaID());
-                        if (atCaster->AreaFlags & 0x800 || atTarget->AreaFlags & 0x800)
+                        auto atCaster = p_caster->GetArea();
+                        auto atTarget = target->GetArea();
+                        if (atCaster->flags & 0x800 || atTarget->flags & 0x800)
                             return SPELL_FAILED_NOT_HERE;
                     }
                 }

@@ -31,6 +31,12 @@
 */
 
 
+bool BreathOfFire(uint32 i, Spell* pSpell)
+{
+    /* No handler required */
+    return true;
+}
+
 bool GnomishTransporter(uint32 i, Spell* pSpell)
 {
     if (!pSpell->p_caster)
@@ -332,9 +338,9 @@ bool MinionsOfGurok(uint32 i, Spell* pSpell)
     float SSZ = target->GetPositionZ();
     float SSO = target->GetOrientation();
 
-    pSpell->p_caster->GetMapMgr()->GetInterface()->SpawnCreature(18181, SSX + rand() % 8 - 4, SSY + rand() % 8 - 4, SSZ, SSO, true, false, 0, 0);
-    pSpell->p_caster->GetMapMgr()->GetInterface()->SpawnCreature(18181, SSX + rand() % 8 - 4, SSY + rand() % 8 - 4, SSZ, SSO, true, false, 0, 0);
-    pSpell->p_caster->GetMapMgr()->GetInterface()->SpawnCreature(18181, SSX + rand() % 8 - 4, SSY + rand() % 8 - 4, SSZ, SSO, true, false, 0, 0);
+    pSpell->p_caster->GetMapMgr()->GetInterface()->SpawnCreature(18181, SSX + RandomUInt(8) - 4, SSY + RandomUInt(8) - 4, SSZ, SSO, true, false, 0, 0);
+    pSpell->p_caster->GetMapMgr()->GetInterface()->SpawnCreature(18181, SSX + RandomUInt(8) - 4, SSY + RandomUInt(8) - 4, SSZ, SSO, true, false, 0, 0);
+    pSpell->p_caster->GetMapMgr()->GetInterface()->SpawnCreature(18181, SSX + RandomUInt(8) - 4, SSY + RandomUInt(8) - 4, SSZ, SSO, true, false, 0, 0);
 
     return true;
 }
@@ -431,9 +437,9 @@ bool HeadlessHorsemanMount(uint32 i, Spell* pSpell)
     if (Player* plr = pSpell->GetPlayerTarget())
     {
         uint32 newspell = 51621;
-        AreaTable* pArea = dbcArea.LookupEntry(plr->GetAreaID());
-        if (pArea && (plr->_GetSkillLineCurrent(SKILL_RIDING, true) >= 225 && ((pArea->AreaFlags & 1024 && plr->GetMapId() != 571) ||
-            (pArea->AreaFlags & 1024 && plr->GetMapId() == 571 && plr->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING)))))
+        auto pArea = plr->GetArea();
+        if (pArea && (plr->_GetSkillLineCurrent(SKILL_RIDING, true) >= 225 && ((pArea->flags & 1024 && plr->GetMapId() != 571) ||
+            (pArea->flags & 1024 && plr->GetMapId() == 571 && plr->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING)))))
 
         {
             if (plr->_GetSkillLineCurrent(SKILL_RIDING, true) == 300)
@@ -454,10 +460,10 @@ bool MagicBroomMount(uint32 i, Spell* pSpell)
     if (Player* plr = pSpell->GetPlayerTarget())
     {
         uint32 newspell = 42680;
-        AreaTable* pArea = dbcArea.LookupEntry(plr->GetAreaID());
+        auto pArea = plr->GetArea();
         if (pArea && (plr->_GetSkillLineCurrent(SKILL_RIDING, true) >= 225 &&
-            ((pArea->AreaFlags & 1024 && plr->GetMapId() != 571) ||
-            (pArea->AreaFlags & 1024 && plr->GetMapId() == 571 && plr->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING)))))
+            ((pArea->flags & 1024 && plr->GetMapId() != 571) ||
+            (pArea->flags & 1024 && plr->GetMapId() == 571 && plr->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING)))))
         {
             if (plr->_GetSkillLineCurrent(SKILL_RIDING, true) == 300)
                 newspell = 42668;
@@ -486,9 +492,9 @@ bool Invincible(uint32 i, Spell* pSpell)
     if (Player* plr = pSpell->GetPlayerTarget())
     {
         uint32 newspell = 72281;
-        AreaTable* pArea = dbcArea.LookupEntry(plr->GetAreaID());
-        if (pArea && (plr->_GetSkillLineCurrent(SKILL_RIDING, true) >= 225 && ((pArea->AreaFlags & 1024 && plr->GetMapId() != 571) ||
-            (pArea->AreaFlags & 1024 && plr->GetMapId() == 571 && plr->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING)))))
+        auto pArea = plr->GetArea();
+        if (pArea && (plr->_GetSkillLineCurrent(SKILL_RIDING, true) >= 225 && ((pArea->flags & 1024 && plr->GetMapId() != 571) ||
+            (pArea->flags & 1024 && plr->GetMapId() == 571 && plr->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING)))))
         {
             if (plr->_GetSkillLineCurrent(SKILL_RIDING, true) == 300)
                 newspell = 72284;
@@ -524,7 +530,7 @@ bool SixDemonBag(uint32 i, Spell* s)
         return false;
 
     uint32 ClearSpellId[6] = { 8401, 8408, 930, 118, 1680, 10159 };
-    uint32 randid = RandomUInt(5);
+    uint32 randid = RandomUInt(1, 6);
     uint32 spelltocast = ClearSpellId[randid];
 
     s->u_caster->CastSpell(unitTarget, spelltocast, true);
@@ -536,7 +542,7 @@ bool ExtractGas(uint32 i, Spell* s)
 {
     bool check = false;
     uint32 cloudtype = 0;
-    Creature* creature = NULL;
+    Creature* creature = nullptr;
 
     if (!s->p_caster)
         return false;
@@ -566,15 +572,16 @@ bool ExtractGas(uint32 i, Spell* s)
     uint32 item = 0;
     uint32 count = 0;
 
-    count = 3 + (rand() % 3);
+    count = 3 + (RandomUInt(3));
 
-    if (cloudtype == 24222) item = 22572; //-air
-    if (cloudtype == 17408) item = 22576; //-mana
-    if (cloudtype == 17407) item = 22577; //-shadow
-    if (cloudtype == 17378) item = 22578; //-water
-
-    if (item == 0)
-        return false;
+    if (cloudtype == 24222)
+        item = 22572; //-air
+    if (cloudtype == 17408)
+        item = 22576; //-mana
+    if (cloudtype == 17407)
+        item = 22577; //-shadow
+    if (cloudtype == 17378)
+        item = 22578; //-water
 
     s->p_caster->GetItemInterface()->AddItemById(item, count, 0);
     creature->Despawn(3500, creature->GetProto()->RespawnTime);
@@ -864,11 +871,11 @@ bool X53Mount(uint32 i, Aura *a, bool apply)
     {
         uint32 newspell = 0;
         Player* p = TO< Player* >(a->GetTarget());
-        AreaTable* area = dbcArea.LookupEntry(p->GetAreaID());
+        auto area = p->GetArea();
         uint32 skill = p->_GetSkillLineCurrent(SKILL_RIDING, true);
 
-        if (skill >= 225 && (((area->AreaFlags & 1024) && p->GetMapId() != 571) ||
-            ((area->AreaFlags & 1024) && p->GetMapId() == 571 && p->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))))
+        if (skill >= 225 && (((area->flags & 1024) && p->GetMapId() != 571) ||
+            ((area->flags & 1024) && p->GetMapId() == 571 && p->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))))
         {
             if (skill == 300)
             {
@@ -890,6 +897,7 @@ bool X53Mount(uint32 i, Aura *a, bool apply)
 
 void SetupItemSpells_1(ScriptMgr* mgr)
 {
+    mgr->register_dummy_spell(29403, &BreathOfFire);            // Fiery Festival Brew
     mgr->register_dummy_spell(23453, &GnomishTransporter);      // Gnomish Transporter
     mgr->register_dummy_spell(16589, &NoggenFoggerElixr);       // Noggenfogger
     mgr->register_dummy_spell(24930, &HallowsEndCandy);         // Hallows End Candy

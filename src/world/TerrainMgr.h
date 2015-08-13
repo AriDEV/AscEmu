@@ -196,6 +196,9 @@ class TerrainTile
 class TerrainHolder
 {
     public:
+        // This should be in AreaStorage.cpp
+        const bool GetAreaInfo(float x, float y, float z, uint32 &mogp_flags, int32 &adt_id, int32 &root_id, int32 &group_id);
+
         uint32 m_mapid;
         TerrainTile* m_tiles[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
         FastMutex m_lock[TERRAIN_NUM_TILES][TERRAIN_NUM_TILES];
@@ -216,6 +219,7 @@ class TerrainHolder
                     UnloadTile(i, j);
         }
 
+        uint16 GetAreaFlagWithoutAdtId(float x, float y);
         TerrainTile* GetTile(float x, float y);
         TerrainTile* GetTile(int32 tx, int32 ty)
         {
@@ -324,15 +328,14 @@ class TerrainHolder
             TerrainTile* tile = GetTile(x, y);
 
             if (tile == NULL)
+            {
+                // No generated map for this area (usually instances)
                 return 0;
+            }
             uint32 rv = tile->m_map.GetArea(x, y);
             tile->DecRef();
             return rv;
         }
-
-        AreaTable* GetArea(float x, float y, float z);
-
-        AreaTable* GetArea2D(float x, float y);
 
         bool GetLiquidInfo(float x, float y, float z, float & liquidlevel, uint32 & liquidtype)
         {

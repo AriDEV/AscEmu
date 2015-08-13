@@ -66,6 +66,8 @@ Object::Object() : m_position(0, 0, 0, 0), m_spawnLocation(0, 0, 0, 0)
     m_faction = dbcFactionTemplate.LookupRow(0);
     m_factionDBC = dbcFaction.LookupRow(0);
 
+    m_objectTypeId = TYPEID_OBJECT;
+
     m_objectsInRange.clear();
     m_inRangePlayers.clear();
     m_oppFactsInRange.clear();
@@ -95,6 +97,21 @@ Object::~Object()
 
     //avoid leaving traces in eventmanager. Have to work on the speed. Not all objects ever had events so list iteration can be skipped
     sEventMgr.RemoveEvents(this);
+}
+
+::DBC::Structures::AreaTableEntry const* Object::GetArea()
+{
+    if (!this->IsInWorld()) return nullptr;
+
+    auto map_mgr = this->GetMapMgr();
+    if (!map_mgr) return nullptr;
+
+    auto area_flag = map_mgr->GetAreaFlag(this->GetPositionX(), this->GetPositionY(), this->GetPositionZ());
+    auto at = MapManagement::AreaManagement::AreaStorage::GetAreaByFlag(area_flag);
+    if (!at)
+        at = MapManagement::AreaManagement::AreaStorage::GetAreaByMapId(this->GetMapId());
+
+    return at;
 }
 
 void Object::_Create(uint32 mapid, float x, float y, float z, float ang)
