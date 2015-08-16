@@ -1354,7 +1354,7 @@ void NothThePlaguebringerAI::AIUpdate()
             if (IsHeroic() && IsTimerFinished(mBlinkTimer))
             {
                 CastSpellNowNoScheduling(mCriple);
-                ResetTimer(mBlinkTimer, 28000 + (rand() % 12 +1) * 1000);
+                ResetTimer(mBlinkTimer, 28000 + (RandomUInt(1, 12) * 1000));
             };
         };
 
@@ -1374,7 +1374,7 @@ void NothThePlaguebringerAI::AIUpdate()
             PlaguedWarriorAI* WarriorAI = NULL;
             for (uint32 i = 0; i < SkelLimit; ++i)
             {
-                Id = rand () % SkelLimit;
+                Id = RandomUInt(SkelLimit);
                 if (PosTaken[Id])
                 {
                     for (uint32 j = 0; j < 3; ++j)
