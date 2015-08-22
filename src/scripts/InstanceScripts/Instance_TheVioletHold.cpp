@@ -103,7 +103,7 @@ public:
     {
         m_numBarrel = 0;
 
-        for (int i = 0; i < TVH_END; ++i)
+        for (uint8 i = 0; i < TVH_END; ++i)
             m_phaseData[i] = State_NotStarted;
 
         this->RegisterScriptUpdateEvent();

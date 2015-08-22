@@ -796,6 +796,14 @@ Aura::Aura(SpellEntry* proto, int32 duration, Object* caster, Unit* target, bool
 
     m_casterfaction = 0;
     mod = 0;
+    for (uint8 i = 0; i < 3; ++i)
+    {
+        m_modList[i].m_type = 0;
+        m_modList[i].m_amount = 0;
+        m_modList[i].m_miscValue = 0;
+        m_modList[i].i = 0;
+        m_modList[i].realamount = 0;
+    }
 }
 
 Aura::~Aura()
@@ -830,8 +838,10 @@ void Aura::Remove()
 		if (m_spellProto->Effect[x] == SPELL_EFFECT_TRIGGER_SPELL && !m_spellProto->always_apply)
 		{
 			// I'm not sure about this! FIX ME!!
-			if (dbcSpell.LookupEntryForced(GetSpellProto()->EffectTriggerSpell[x])->DurationIndex < m_spellProto->DurationIndex)
-				m_target->RemoveAura(GetSpellProto()->EffectTriggerSpell[x]);
+            auto spell_entry = dbcSpell.LookupEntryForced(GetSpellProto()->EffectTriggerSpell[x]);
+            if (spell_entry != nullptr)
+                if (spell_entry->DurationIndex < m_spellProto->DurationIndex)
+				    m_target->RemoveAura(GetSpellProto()->EffectTriggerSpell[x]);
 		}
 		else if (IsAreaAura() && m_casterGuid == m_target->GetGUID())
 			ClearAATargets();
@@ -1505,15 +1515,17 @@ void Aura::EventUpdateAA(float r)
 
 	for (AreaAuraList::iterator itr = targets.begin(); itr != targets.end(); ++itr)
 	{
-		Unit* u = m_target->GetMapMgr()->GetUnit(*itr);
+		auto unit = m_target->GetMapMgr()->GetUnit(*itr);
+        if (unit == nullptr)
+            return;
 
-		if (u->HasAura(m_spellProto->Id))
+		if (unit->HasAura(m_spellProto->Id))
 			continue;
 
-		Aura* a = sSpellFactoryMgr.NewAura(m_spellProto, GetDuration(), m_target, u, true);
+		Aura* a = sSpellFactoryMgr.NewAura(m_spellProto, GetDuration(), m_target, unit, true);
 		a->m_areaAura = true;
 		a->AddMod(mod->m_type, mod->m_amount , mod->m_miscValue, mod->i);
-		u->AddAura(a);
+		unit->AddAura(a);
 	}
 }
 

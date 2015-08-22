@@ -407,7 +407,9 @@ class DofNaralexAI : public MoonScriptBossAI
         DofNaralexAI(Creature* pCreature) : MoonScriptBossAI(pCreature)
         {
             // --- Initialization ---
-            for (int i = 1; i < 39; i++)
+            Mutanus = nullptr;
+
+            for (uint8 i = 1; i < 39; i++)
                 AddWaypoint(CreateWaypoint(i, 0, Flag_Run, ToNaralex[i]));
             SetMoveType(Move_DontMoveWP);
 

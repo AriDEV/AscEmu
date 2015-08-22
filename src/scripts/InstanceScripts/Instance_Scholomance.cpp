@@ -95,7 +95,7 @@ class DoctorTheolenKrastinovAI : public CreatureAIScript
         {
             FRENZY_LIMITER = 0;
             nrspells = 3;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -160,7 +160,7 @@ class DoctorTheolenKrastinovAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -173,6 +173,7 @@ class DoctorTheolenKrastinovAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -212,7 +213,7 @@ class InstructorMaliciaAI : public CreatureAIScript
         InstructorMaliciaAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 5;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -278,7 +279,7 @@ class InstructorMaliciaAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -291,6 +292,7 @@ class InstructorMaliciaAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -329,7 +331,7 @@ class TheRavenianAI : public CreatureAIScript
         TheRavenianAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 4;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -389,7 +391,7 @@ class TheRavenianAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -402,6 +404,7 @@ class TheRavenianAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -440,7 +443,7 @@ class LadyIlluciaBarovAI : public CreatureAIScript
         LadyIlluciaBarovAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 5;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -506,7 +509,7 @@ class LadyIlluciaBarovAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -519,6 +522,7 @@ class LadyIlluciaBarovAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -557,7 +561,7 @@ class RasForstwhisperAI : public CreatureAIScript
         RasForstwhisperAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 6;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -630,7 +634,7 @@ class RasForstwhisperAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -643,6 +647,7 @@ class RasForstwhisperAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -681,7 +686,7 @@ class JandiceBarovAI : public CreatureAIScript
         JandiceBarovAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 3;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -735,7 +740,7 @@ class JandiceBarovAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -748,6 +753,7 @@ class JandiceBarovAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -786,7 +792,7 @@ class KormokAI : public CreatureAIScript
         KormokAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 3;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -841,7 +847,7 @@ class KormokAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -854,6 +860,7 @@ class KormokAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -893,7 +900,7 @@ class VectusAI : public CreatureAIScript
         {
             FRENZY_LIMITER = 0;
             nrspells = 3;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -956,7 +963,7 @@ class VectusAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -969,6 +976,7 @@ class VectusAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -1008,7 +1016,7 @@ class LordAlexeiBarovAI : public CreatureAIScript
         LordAlexeiBarovAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 3;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -1063,7 +1071,7 @@ class LordAlexeiBarovAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -1076,6 +1084,7 @@ class LordAlexeiBarovAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -1114,7 +1123,7 @@ class LorekeeperPolkeltAI : public CreatureAIScript
         LorekeeperPolkeltAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 4;
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -1174,7 +1183,7 @@ class LorekeeperPolkeltAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -1187,6 +1196,7 @@ class LorekeeperPolkeltAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;
@@ -1225,7 +1235,7 @@ class DarkmasterGandlingAI : public CreatureAIScript
         DarkmasterGandlingAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
             nrspells = 3; // 4 ?
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
 
@@ -1280,7 +1290,7 @@ class DarkmasterGandlingAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -1293,6 +1303,7 @@ class DarkmasterGandlingAI : public CreatureAIScript
                             case TARGET_SELF:
                             case TARGET_VARIOUS:
                                 _unit->CastSpell(_unit, spells[i].info, spells[i].instant);
+                                break;
                             case TARGET_ATTACKING:
                                 _unit->CastSpell(target, spells[i].info, spells[i].instant);
                                 break;

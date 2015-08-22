@@ -583,6 +583,9 @@ void Pet::LoadFromDB(Player* owner, PlayerPet* pi)
     m_phase = m_Owner->GetPhase();
     mPi = pi;
     creature_info = CreatureNameStorage.LookupEntry(mPi->entry);
+    if (creature_info == nullptr)
+        return;
+
     proto = CreatureProtoStorage.LookupEntry(mPi->entry);
     myFamily = dbcCreatureFamily.LookupEntry(creature_info->Family);
 
@@ -737,7 +740,9 @@ void Pet::InitializeMe(bool first)
     SetUInt32Value(UNIT_FIELD_PETNUMBER, GetUIdFromGUID());
     SetUInt32Value(UNIT_FIELD_PET_NAME_TIMESTAMP, (uint32)UNIXTIME);
 
-    myFamily = dbcCreatureFamily.LookupEntry(GetCreatureInfo()->Family);
+    auto creature_info = GetCreatureInfo();
+    if (creature_info != nullptr)
+        myFamily = dbcCreatureFamily.LookupEntry(creature_info->Family);
 
     SetPetDiet();
     _setFaction();

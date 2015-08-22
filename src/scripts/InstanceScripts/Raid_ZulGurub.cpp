@@ -49,7 +49,7 @@ class JeklikAI : public CreatureAIScript
             nrspells = 6;
 
             // --- Initialization ---
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
             }
@@ -135,7 +135,7 @@ class JeklikAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 
@@ -198,8 +198,8 @@ class VenoxisAI : public CreatureAIScript
 {
     public:
         ADD_CREATURE_FACTORY_FUNCTION(VenoxisAI);
-        SP_AI_Spell spells[3];
-        bool m_spellcheck[3];
+        SP_AI_Spell spells[4];
+        bool m_spellcheck[4];
 
         VenoxisAI(Creature* pCreature) : CreatureAIScript(pCreature)
         {
@@ -207,7 +207,7 @@ class VenoxisAI : public CreatureAIScript
             nrspells = 4;
 
             // --- Initialization ---
-            for (int i = 0; i < nrspells; i++)
+            for (uint8 i = 0; i < nrspells; i++)
             {
                 m_spellcheck[i] = false;
             }
@@ -281,7 +281,7 @@ class VenoxisAI : public CreatureAIScript
             {
                 float comulativeperc = 0;
                 Unit* target = NULL;
-                for (int i = 0; i < nrspells; i++)
+                for (uint8 i = 0; i < nrspells; i++)
                 {
                     if (!spells[i].perctrigger) continue;
 

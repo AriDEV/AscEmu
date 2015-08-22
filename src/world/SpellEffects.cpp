@@ -879,15 +879,18 @@ void Spell::SpellEffectSchoolDMG(uint32 i) // dmg school
             {
                 if (p_caster != NULL)
                 {
-                    Item* itm = p_caster->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_MAINHAND);
-                    if (p_caster->HasAura(12329))
-                        dmg = (((itm->GetProto()->Damage[0].Min + itm->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i]) * 0.4;
-                    else if (p_caster->HasAura(12950))
-                        dmg = (((itm->GetProto()->Damage[0].Min + itm->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i]) * 0.8;
-                    else if (p_caster->HasAura(20496))
-                        dmg = (((itm->GetProto()->Damage[0].Min + itm->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i]) * 1.2;
-                    else
-                        dmg = ((itm->GetProto()->Damage[0].Min + itm->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i];
+                    auto item = p_caster->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_MAINHAND);
+                    if (item != nullptr)
+                    {
+                        if (p_caster->HasAura(12329))
+                            dmg = (((item->GetProto()->Damage[0].Min + item->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i]) * 0.4;
+                        else if (p_caster->HasAura(12950))
+                            dmg = (((item->GetProto()->Damage[0].Min + item->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i]) * 0.8;
+                        else if (p_caster->HasAura(20496))
+                            dmg = (((item->GetProto()->Damage[0].Min + item->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i]) * 1.2;
+                        else
+                            dmg = ((item->GetProto()->Damage[0].Min + item->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i];
+                    }
                 }
             }break;
             // Slam
@@ -902,8 +905,9 @@ void Spell::SpellEffectSchoolDMG(uint32 i) // dmg school
             {
                 if (p_caster != NULL)
                 {
-                    Item* itm = p_caster->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_MAINHAND);
-                    dmg = ((itm->GetProto()->Damage[0].Min + itm->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i];
+                    auto item = p_caster->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_MAINHAND);
+                    if (item != nullptr)
+                        dmg = ((item->GetProto()->Damage[0].Min + item->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i];
                 }
             }break;
             case 6343:
@@ -1000,8 +1004,9 @@ void Spell::SpellEffectSchoolDMG(uint32 i) // dmg school
             {
                 if (p_caster != NULL)
                 {
-                    Item* it = p_caster->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_RANGED);
-                    dmg = ((it->GetProto()->Damage[0].Min + it->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i];
+                    auto item = p_caster->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_RANGED);
+                    if (item != nullptr)
+                        dmg = ((item->GetProto()->Damage[0].Min + item->GetProto()->Damage[0].Max) * 0.2f) + m_spellInfo->EffectBasePoints[i];
 
                 }
             }break;
@@ -1009,10 +1014,9 @@ void Spell::SpellEffectSchoolDMG(uint32 i) // dmg school
             {
                 if (p_caster != NULL)
                 {
-                    Item* it = p_caster->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_RANGED);
-                    dmg = ((it->GetProto()->Damage[0].Min + it->GetProto()->Damage[0].Max) * 0.2f) * 1.25;
-
-
+                    auto item = p_caster->GetItemInterface()->GetInventoryItem(EQUIPMENT_SLOT_RANGED);
+                    if (item != nullptr)
+                        dmg = ((item->GetProto()->Damage[0].Min + item->GetProto()->Damage[0].Max) * 0.2f) * 1.25;
                 }
             }break;
             case 56641:
@@ -2630,11 +2634,17 @@ void Spell::SpellEffectSummonCompanion(uint32 i, SummonPropertiesEntry* spe, Cre
 
     if (u_caster->GetSummonedCritterGUID() != 0)
     {
-        Unit* critter = u_caster->GetMapMgr()->GetUnit(u_caster->GetSummonedCritterGUID());
-        Creature* c = TO< Creature* >(critter);
-        uint32 currententry = c->GetCreatureInfo()->Id;
+        auto critter = u_caster->GetMapMgr()->GetUnit(u_caster->GetSummonedCritterGUID());
+        if (critter == nullptr)
+            return;
 
-        c->RemoveFromWorld(false, true);
+        auto creature = TO< Creature* >(critter);
+        if (creature == nullptr)
+            return;
+
+        uint32 currententry = creature->GetCreatureInfo()->Id;
+
+        creature->RemoveFromWorld(false, true);
         u_caster->SetSummonedCritterGUID(0);
 
         // Before WOTLK when you casted the companion summon spell the second time it removed the companion
@@ -2643,15 +2653,15 @@ void Spell::SpellEffectSummonCompanion(uint32 i, SummonPropertiesEntry* spe, Cre
             return;
     }
 
-    Summon* s = u_caster->GetMapMgr()->CreateSummon(proto->Id, SUMMONTYPE_COMPANION);
-    if (s == NULL)
+    auto summon = u_caster->GetMapMgr()->CreateSummon(proto->Id, SUMMONTYPE_COMPANION);
+    if (summon == nullptr)
         return;
 
-    s->Load(proto, u_caster, v, m_spellInfo->Id, spe->Slot - 1);
-    s->SetCreatedBySpell(m_spellInfo->Id);
-    s->GetAIInterface()->SetFollowDistance(GetRadius(i));
-    s->PushToWorld(u_caster->GetMapMgr());
-    u_caster->SetSummonedCritterGUID(s->GetGUID());
+    summon->Load(proto, u_caster, v, m_spellInfo->Id, spe->Slot - 1);
+    summon->SetCreatedBySpell(m_spellInfo->Id);
+    summon->GetAIInterface()->SetFollowDistance(GetRadius(i));
+    summon->PushToWorld(u_caster->GetMapMgr());
+    u_caster->SetSummonedCritterGUID(summon->GetGUID());
 }
 
 void Spell::SpellEffectSummonVehicle(uint32 i, SummonPropertiesEntry *spe, CreatureProto *proto, LocationVector &v)
@@ -3506,7 +3516,7 @@ void Spell::SpellEffectSpawn(uint32 i)
 
             static float coord[3][3] = { { -108.9034f, 2129.5678f, 144.9210f }, { -108.9034f, 2155.5678f, 155.678f }, { -77.9034f, 2155.5678f, 155.678f } };
 
-            int j = rand() % 3;
+            uint8 j = RandomUInt(3);
             //u_caster->GetAIInterface()->SendMoveToPacket(coord[j][0],coord[j][1],coord[j][2],0.0f,0,u_caster->GetAIInterface()->getMoveFlags());
         }
     }

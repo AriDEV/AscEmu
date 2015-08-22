@@ -142,8 +142,13 @@ class ChaoticRiftAI : public MoonScriptBossAI
         ChaoticRiftAI(Creature* pCreature) : MoonScriptBossAI(pCreature)
         {
             _unit->GetAIInterface()->SetAllowedToEnterCombat(false);
-            AddSpell(SUMMON_MANA_WRAITH, Target_Self, 30, 0, dbcSpell.LookupEntryForced(SUMMON_MANA_WRAITH)->RecoveryTime);
-            AddSpell(CHAOTIC_ENERGY_BURST, Target_RandomPlayer, 30, 0, dbcSpell.LookupEntryForced(CHAOTIC_ENERGY_BURST)->RecoveryTime);
+            auto spell_mana_wrath = dbcSpell.LookupEntryForced(SUMMON_MANA_WRAITH);
+            if (spell_mana_wrath != nullptr)
+                AddSpell(SUMMON_MANA_WRAITH, Target_Self, 30, 0, spell_mana_wrath->RecoveryTime);
+
+            auto spell_energy_burst = dbcSpell.LookupEntryForced(CHAOTIC_ENERGY_BURST);
+            if (spell_energy_burst != nullptr)
+                AddSpell(CHAOTIC_ENERGY_BURST, Target_RandomPlayer, 30, 0, spell_energy_burst->RecoveryTime);
         };
 
         void OnLoad()
@@ -249,7 +254,7 @@ class TelestraBossAI : public MoonScriptBossAI
                 SetAllowTargeting(false);
                 ApplyAura(60191);
 
-                for (int i = 0; i < 3; ++i)
+                for (uint8 i = 0; i < 3; ++i)
                 {
                     mAddArray[i] = _unit->GetMapMgr()->GetInterface()->SpawnCreature(CN_TELESTRA_FIRE + i, FormSpawns[i].x, FormSpawns[i].y, FormSpawns[i].z, FormSpawns[i].o, true, true, 0, 0);
                     if (mAddArray[i] != NULL)
@@ -260,7 +265,7 @@ class TelestraBossAI : public MoonScriptBossAI
 
             if (GetPhase() == 2)
             {
-                for (int i = 0; i < 3; ++i)
+                for (uint8 i = 0; i < 3; ++i)
                 {
                     if (mAddArray[i] != NULL)
                     {
@@ -300,7 +305,7 @@ class TelestraBossAI : public MoonScriptBossAI
 
         void OnCombatStop(Unit* pTarget)
         {
-            for (int i = 0; i < 3; ++i)
+            for (uint8 i = 0; i < 3; ++i)
             {
                 if (mAddArray[i] != NULL)
                 {
@@ -319,7 +324,7 @@ class TelestraBossAI : public MoonScriptBossAI
         {
             _unit->SendScriptTextChatMessage(4328);      // Damn the... luck.
 
-            for (int i = 0; i < 3; ++i)
+            for (uint8 i = 0; i < 3; ++i)
             {
                 if (mAddArray[i] != NULL)
                 {
@@ -611,7 +616,7 @@ class NexusScript : public MoonInstanceScript
 
             mCSCount = 0;
 
-            for (uint32 i = 0; i < NEXUS_END; ++i)
+            for (uint8 i = 0; i < NEXUS_END; ++i)
                 m_uiEncounters[i] = State_NotStarted;
         };
 
